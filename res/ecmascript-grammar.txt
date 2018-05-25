@@ -1,11 +1,4 @@
-;
-; Tokens.
-;
 include includes/tokens.txt
-
-regex WHITESPACE \s+
-regex _ \s*
-
-Start -> CodeBlockContent
-
-CodeBlockContent -> IDENTIFIER
+include includes/main.txt
+include includes/statements.txt
+include includes/expressions.txt

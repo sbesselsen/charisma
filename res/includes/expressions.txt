@@ -1,0 +1,8 @@
+;
+; Expressions.
+;
+Expression -> NumberExpression
+
+NumberExpression -> NUMBER_INTEGER { reduceIntegerNumberExpression }
+    | NUMBER_FLOAT { reduceFloatNumberExpression }
+    | NUMBER_OCTAL { reduceOctalNumberExpression }

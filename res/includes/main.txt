@@ -1,0 +1,17 @@
+;
+; Main program structure.
+;
+Start -> CodeBlockContent
+
+;
+; Code blocks.
+;
+CodeBlockItems -> CodeBlockItems NONCODE
+    | CodeBlockItems SEMICOLON
+    | CodeBlockItems Statement SEMICOLON { arrayPush($0, $1) }
+    | Statement SEMICOLON { arrayOf($0) }
+    | NONCODE { emptyArray }
+
+CodeBlockContent -> CodeBlockItems { reduceCodeBlockContent }
+
+CodeBlock -> CURLY_OPEN CodeBlockContent CURLY_CLOSE { $1 }

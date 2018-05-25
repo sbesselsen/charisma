@@ -66,8 +66,16 @@ regex IDENTIFIER [a-zA-Z_$][a-zA-Z_0-9$]*
 regex STRING_DOUBLEQUOTE "([^\\"]+|\\\\|\\"|\\[^"])*"
 regex STRING_SINGLEQUOTE '([^\\']+|\\\\|\\'|\\[^'])*'
 
-regex NUMBER ([0-9]+(\.[0-9]+)?|0x[0-9abcdefABCDEF]+)
+regex NUMBER_OCTAL 0x[0-9abcdefABCDEF]+
+regex NUMBER_INTEGER [0-9]+
+regex NUMBER_FLOAT [0-9]+\.[0-9]+
 
 regex REGEX \/[^ \/]([^\\\/]+|\\\\|\\\/|\\[^\/])*\/[a-zA-Z]*
 regex COMMENT_MULTILINE /\/*.*?\*/
 regex COMMENT_SINGLELINE //[^\n]*
+
+regex NONCODE (\s+|/\/*.*?\*/|//[^\n]*)+
+
+regex WHITESPACE \s+
+regex _ \s*
+
