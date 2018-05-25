@@ -1,0 +1,21 @@
+{
+    "name": "sbesselsen/charisma",
+    "description": "An Ecmascript compiler and runtime environment for PHP",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sebastiaan Besselsen",
+            "email": "sebastiaan.besselsen@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0",
+        "sbesselsen/charm": "^1.0"
+    },
+    "autoload": {
+         "psr-4": {
+             "Charisma\\": "src/"
+         }
+    }
+}
