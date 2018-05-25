@@ -1,8 +1,28 @@
+operator DOT 19 left
+
 ;
 ; Expressions.
 ;
-Expression -> NumberExpression
+Expression -> PAREN_OPEN _ Expression _ PAREN_CLOSE { $2 }
 
-NumberExpression -> NUMBER_INTEGER { reduceIntegerNumberExpression }
+;
+; Member access expressions.
+;
+Expression -> Expression _ DOT _ IDENTIFIER { reduceMemberAccessExpression($0, $4) }
+
+;
+; Computed member access expressions.
+;
+Expression -> Expression _ BLOCK_OPEN _ Expression _ BLOCK_CLOSE { reduceComputedMemberAccessExpression($0, $4) }
+
+;
+; Variable access expressions.
+;
+Expression -> IDENTIFIER { reduceVariableAccessExpression($0) }
+
+;
+; Number expressions.
+;
+Expression -> NUMBER_INTEGER { reduceIntegerNumberExpression }
     | NUMBER_FLOAT { reduceFloatNumberExpression }
     | NUMBER_OCTAL { reduceOctalNumberExpression }

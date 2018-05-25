@@ -2,7 +2,7 @@
 
 namespace Charisma\Parser\Node\Expression;
 
-final class NumberExpression extends Expression
+final class NumberExpression extends ValueExpression
 {
     /**
      * The value.
@@ -12,6 +12,10 @@ final class NumberExpression extends Expression
      */
     public $value;
 
+    /**
+     * NumberExpression constructor.
+     * @param int|double $value
+     */
     public function __construct($value)
     {
         $this->value = $value;
