@@ -1,6 +1,6 @@
 {
     "name": "sbesselsen/charisma",
-    "description": "An Ecmascript compiler and runtime environment for PHP",
+    "description": "An EcmaScript compiler and runtime environment for PHP",
     "type": "library",
     "license": "MIT",
     "authors": [
