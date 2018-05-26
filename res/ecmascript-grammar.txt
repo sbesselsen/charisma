@@ -2,3 +2,4 @@ include includes/tokens.txt
 include includes/main.txt
 include includes/statements.txt
 include includes/expressions.txt
+include includes/functions.txt

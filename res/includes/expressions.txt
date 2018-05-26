@@ -1,24 +1,45 @@
 operator DOT 19 left
 
+Expression -> PathExpression
+
 ;
 ; Expressions.
 ;
-Expression -> PAREN_OPEN _ Expression _ PAREN_CLOSE { $2 }
+PathExpression -> ParenExpression
+ParenExpression -> PAREN_OPEN Expression PAREN_CLOSE { $1 }
 
 ;
 ; Member access expressions.
 ;
-Expression -> Expression _ DOT _ IDENTIFIER { reduceMemberAccessExpression($0, $4) }
+PathExpression -> MemberAccessExpression
+MemberAccessExpression -> PathExpression DOT IDENTIFIER { reduceMemberAccessExpression($0, $2) }
 
 ;
 ; Computed member access expressions.
 ;
-Expression -> Expression _ BLOCK_OPEN _ Expression _ BLOCK_CLOSE { reduceComputedMemberAccessExpression($0, $4) }
+PathExpression -> ComputedMemberAccessExpression
+ComputedMemberAccessExpression -> PathExpression BLOCK_OPEN Expression BLOCK_CLOSE { reduceComputedMemberAccessExpression($0, $2) }
 
 ;
 ; Variable access expressions.
 ;
-Expression -> IDENTIFIER { reduceVariableAccessExpression($0) }
+PathExpression -> VariableAccessExpression
+VariableAccessExpression -> IDENTIFIER { reduceVariableAccessExpression($0) }
+
+;
+; New expression.
+;
+Expression -> NewExpression
+NewExpression -> NEW WHITESPACE PathExpression PAREN_OPEN ArgumentList PAREN_CLOSE { reduceNewExpression($2, $4) }
+    | NEW WHITESPACE PathExpression PAREN_OPEN PAREN_CLOSE { reduceNewExpression($2) }
+    | NEW WHITESPACE PathExpression { reduceNewExpression($2) }
+
+;
+; Function call expression.
+;
+Expression -> FunctionCallExpression
+FunctionCallExpression -> PathExpression PAREN_OPEN ArgumentList PAREN_CLOSE { reduceFunctionCallExpression($0, $2) }
+FunctionCallExpression -> PathExpression PAREN_OPEN PAREN_CLOSE { reduceFunctionCallExpression($0) }
 
 ;
 ; Number expressions.
@@ -26,3 +47,4 @@ Expression -> IDENTIFIER { reduceVariableAccessExpression($0) }
 Expression -> NUMBER_INTEGER { reduceIntegerNumberExpression }
     | NUMBER_FLOAT { reduceFloatNumberExpression }
     | NUMBER_OCTAL { reduceOctalNumberExpression }
+

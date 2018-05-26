@@ -1,0 +1,5 @@
+;
+; Function argument list.
+;
+ArgumentList -> ArgumentList COMMA Expression { arrayPush($0, $2) }
+    | Expression { arrayOf($0) }

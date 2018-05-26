@@ -47,7 +47,7 @@ token WHILE while
 token DO do
 token FOR for
 token FUNCTION function
-token NEW new
+exact token NEW new
 token VAR var
 token CONST const
 token LET let
@@ -76,6 +76,6 @@ regex COMMENT_SINGLELINE //[^\n]*
 
 regex NONCODE (\s+|/\/*.*?\*/|//[^\n]*)+
 
-regex WHITESPACE \s+
-regex _ \s*
+escaped chars WHITESPACE \n\t\r\s
 
+whitespace WHITESPACE
