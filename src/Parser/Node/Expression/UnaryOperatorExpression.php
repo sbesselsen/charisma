@@ -2,7 +2,7 @@
 
 namespace Charisma\Parser\Node\Expression;
 
-abstract class UnaryOperatorExpression
+abstract class UnaryOperatorExpression extends Expression
 {
     /**
      * The expression.

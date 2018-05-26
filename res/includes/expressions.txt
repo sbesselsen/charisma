@@ -2,31 +2,41 @@ operator DOT 19 left
 operator INCREMENT 17 nonassoc
 operator DECREMENT 17 nonassoc
 
+operator NOT 16 right
+operator TILDE 16 right
+operator UNARY_PLUS 16 right
+operator UNARY_NEGATION 16 right
+
 Expression -> PathExpression
+
+; TODO: remove PathExpression from LValue! Parser gets confused on DELETE WHITESPACE LValue because it reduces to a PathExpression.
 
 ;
 ; Expressions.
 ;
 PathExpression -> ParenExpression
-PathExpression -> LValue
-
 ParenExpression -> PAREN_OPEN Expression PAREN_CLOSE { $1 }
 
 ;
 ; Member access expressions.
 ;
+PathExpression -> MemberAccessPathExpression
+MemberAccessPathExpression -> PathExpression DOT IDENTIFIER { reduceMemberAccessExpression($0, $2) }
+
 LValue -> MemberAccessExpression
 MemberAccessExpression -> PathExpression DOT IDENTIFIER { reduceMemberAccessExpression($0, $2) }
 
 ;
 ; Computed member access expressions.
 ;
+PathExpression -> ComputedMemberAccessExpression
 LValue -> ComputedMemberAccessExpression
 ComputedMemberAccessExpression -> PathExpression BLOCK_OPEN Expression BLOCK_CLOSE { reduceComputedMemberAccessExpression($0, $2) }
 
 ;
 ; Variable access expressions.
 ;
+PathExpression -> VariableAccessExpression
 LValue -> VariableAccessExpression
 VariableAccessExpression -> IDENTIFIER { reduceVariableAccessExpression($0) }
 
@@ -51,6 +61,21 @@ FunctionCallExpression -> PathExpression PAREN_OPEN PAREN_CLOSE { reduceFunction
 ;
 Expression -> LValue INCREMENT { reducePostfixIncrementExpression($0) }
 Expression -> LValue DECREMENT { reducePostfixDecrementExpression($0) }
+
+;
+; All of the unary expression operators.
+;
+;TODO: Change DELETE WHITESPACE Expression -> DELETE WHITESPACE LValue as soon as we rewrite LValue.
+Expression -> NOT Expression { reduceNotExpression($1) }
+    | TILDE Expression { reduceBitwiseNotExpression($1) }
+    | UNARY_PLUS Expression { reduceUnaryPlusExpression($1) }
+    | UNARY_NEGATION Expression { reduceUnaryNegationExpression($1) }
+    | INCREMENT Expression { reducePrefixIncrementExpression($1) }
+    | DECREMENT Expression { reducePrefixDecrementExpression($1) }
+    | TYPEOF WHITESPACE Expression { reduceTypeofExpression($2) }
+    | VOID WHITESPACE Expression { reduceVoidExpression($2) }
+    | DELETE WHITESPACE Expression { reduceDeleteExpression($2) }
+    | AWAIT WHITESPACE Expression { reduceAwaitExpression($2) }
 
 ;
 ; Number expressions.

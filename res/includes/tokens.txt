@@ -28,9 +28,11 @@ token BINARY_AND &
 token BINARY_OR |
 token INCREMENT ++
 token INCREMENT_ASSIGN +=
+token UNARY_PLUS +
 token ADD +
 token DECREMENT --
 token DECREMENT_ASSIGN -=
+token UNARY_NEGATION -
 token SUBTRACT -
 token MULTIPLY_ASSIGN *=
 token EXPONENT **
@@ -48,15 +50,17 @@ token DO do
 token FOR for
 token FUNCTION function
 exact token NEW new
-token VAR var
-token CONST const
-token LET let
-token RETURN return
-token DELETE delete
-token TYPEOF typeof
-token INSTANCEOF instanceof
-token IN in
-token OF of
+exact token VAR var
+exact token CONST const
+exact token LET let
+exact token RETURN return
+exact token DELETE delete
+exact token TYPEOF typeof
+exact token VOID void
+exact token AWAIT await
+exact token INSTANCEOF instanceof
+exact token IN in
+exact token OF of
 token NULL null
 token UNDEFINED undefined
 token NAN NaN
