@@ -27,10 +27,12 @@ token OR ||
 token BINARY_AND &
 token BINARY_OR |
 token INCREMENT ++
+token PREFIX_INCREMENT ++
 token INCREMENT_ASSIGN +=
 token UNARY_PLUS +
 token ADD +
 token DECREMENT --
+token PREFIX_DECREMENT --
 token DECREMENT_ASSIGN -=
 token UNARY_NEGATION -
 token SUBTRACT -

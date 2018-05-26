@@ -15,6 +15,7 @@ use Charisma\Parser\Node\Expression\PostfixDecrementExpression;
 use Charisma\Parser\Node\Expression\PostfixIncrementExpression;
 use Charisma\Parser\Node\Expression\PrefixDecrementExpression;
 use Charisma\Parser\Node\Expression\PrefixIncrementExpression;
+use Charisma\Parser\Node\Expression\StringExpression;
 use Charisma\Parser\Node\Expression\TypeofExpression;
 use Charisma\Parser\Node\Expression\UnaryNegationExpression;
 use Charisma\Parser\Node\Expression\UnaryPlusExpression;
@@ -26,6 +27,12 @@ trait ExpressionTrait
     protected function reduceNewExpression($constructor, $argumentList = null)
     {
         return new NewExpression($constructor, $argumentList ?? []);
+    }
+
+    protected function reduceConstructedNewExpression($functionCall)
+    {
+        /** @var FunctionCallExpression $functionCall */
+        return new NewExpression($functionCall->expression, $functionCall->arguments);
     }
 
     protected function reduceFunctionCallExpression($function, $argumentList = null)
@@ -106,6 +113,16 @@ trait ExpressionTrait
     protected function reduceAwaitExpression($expression)
     {
         return new AwaitExpression($expression);
+    }
+
+    protected function reduceDoubleQuotedStringExpression($str) {
+        // TODO: unescape
+        return new StringExpression($str[0]);
+    }
+
+    protected function reduceSingleQuotedStringExpression($str) {
+        // TODO: unescape
+        return new StringExpression($str[0]);
     }
 
     protected function reduceIntegerNumberExpression($number)

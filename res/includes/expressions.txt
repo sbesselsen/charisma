@@ -6,55 +6,62 @@ operator NOT 16 right
 operator TILDE 16 right
 operator UNARY_PLUS 16 right
 operator UNARY_NEGATION 16 right
+operator PREFIX_INCREMENT 16 right
+operator PREFIX_DECREMENT 16 right
+operator TYPEOF 16 right
+operator VOID 16 right
+operator DELETE 16 right
+operator AWAIT 16 right
 
-Expression -> PathExpression
+;
+; LValue.
+;
+LValue -> MemberAccessLValue
+    | ComputedMemberAccessLValue
+    | VariableAccessLValue
 
-; TODO: remove PathExpression from LValue! Parser gets confused on DELETE WHITESPACE LValue because it reduces to a PathExpression.
+MemberAccessLValue -> ParenExpression DOT IDENTIFIER { reduceMemberAccessExpression($0, $2) }
+    | FunctionCallExpression DOT IDENTIFIER { reduceMemberAccessExpression($0, $2) }
+    | LValue DOT IDENTIFIER { reduceMemberAccessExpression($0, $2) }
+    | ObjectLikeValueExpression DOT IDENTIFIER { reduceMemberAccessExpression($0, $2) }
+
+ComputedMemberAccessLValue -> ParenExpression BLOCK_OPEN Expression BLOCK_CLOSE { reduceComputedMemberAccessExpression($0, $2) }
+    | FunctionCallExpression BLOCK_OPEN Expression BLOCK_CLOSE { reduceComputedMemberAccessExpression($0, $2) }
+    | LValue BLOCK_OPEN Expression BLOCK_CLOSE { reduceComputedMemberAccessExpression($0, $2) }
+    | ObjectLikeValueExpression BLOCK_OPEN Expression BLOCK_CLOSE { reduceComputedMemberAccessExpression($0, $2) }
+
+VariableAccessLValue -> IDENTIFIER { reduceVariableAccessExpression($0) }
 
 ;
 ; Expressions.
 ;
-PathExpression -> ParenExpression
+Expression -> PathExpression
+Expression -> ParenExpression
+
+PathExpression -> LValue
+    | FunctionCallExpression
+    | ParenExpression
+
 ParenExpression -> PAREN_OPEN Expression PAREN_CLOSE { $1 }
 
-;
-; Member access expressions.
-;
-PathExpression -> MemberAccessPathExpression
-MemberAccessPathExpression -> PathExpression DOT IDENTIFIER { reduceMemberAccessExpression($0, $2) }
-
-LValue -> MemberAccessExpression
-MemberAccessExpression -> PathExpression DOT IDENTIFIER { reduceMemberAccessExpression($0, $2) }
-
-;
-; Computed member access expressions.
-;
-PathExpression -> ComputedMemberAccessExpression
-LValue -> ComputedMemberAccessExpression
-ComputedMemberAccessExpression -> PathExpression BLOCK_OPEN Expression BLOCK_CLOSE { reduceComputedMemberAccessExpression($0, $2) }
-
-;
-; Variable access expressions.
-;
-PathExpression -> VariableAccessExpression
-LValue -> VariableAccessExpression
-VariableAccessExpression -> IDENTIFIER { reduceVariableAccessExpression($0) }
+Expression -> ValueExpression
+ValueExpression -> ObjectLikeValueExpression
 
 ;
 ; New expression.
 ;
 Expression -> NewExpression
-NewExpression -> NEW WHITESPACE PathExpression PAREN_OPEN ArgumentList PAREN_CLOSE { reduceNewExpression($2, $4) }
-    | NEW WHITESPACE PathExpression PAREN_OPEN PAREN_CLOSE { reduceNewExpression($2) }
-    | NEW WHITESPACE PathExpression { reduceNewExpression($2) }
+NewExpression -> NEW WHITESPACE ParenExpression PAREN_OPEN ArgumentList PAREN_CLOSE { reduceNewExpression($2, $4) }
+    | NEW WHITESPACE ParenExpression { reduceNewExpression($2) }
+    | NEW WHITESPACE LValue { reduceNewExpression($2) }
+    | NEW WHITESPACE FunctionCallExpression { reduceConstructedNewExpression($2) }
     | NEW WHITESPACE NewExpression { reduceNewExpression($2) }
 
 ;
 ; Function call expression.
 ;
-Expression -> FunctionCallExpression
-FunctionCallExpression -> PathExpression PAREN_OPEN ArgumentList PAREN_CLOSE { reduceFunctionCallExpression($0, $2) }
-FunctionCallExpression -> PathExpression PAREN_OPEN PAREN_CLOSE { reduceFunctionCallExpression($0) }
+FunctionCallExpression -> LValue PAREN_OPEN ArgumentList PAREN_CLOSE { reduceFunctionCallExpression($0, $2) }
+    | LValue PAREN_OPEN PAREN_CLOSE { reduceFunctionCallExpression($0) }
 
 ;
 ; Postfix increment/decrement expression.
@@ -70,17 +77,23 @@ Expression -> NOT Expression { reduceNotExpression($1) }
     | TILDE Expression { reduceBitwiseNotExpression($1) }
     | UNARY_PLUS Expression { reduceUnaryPlusExpression($1) }
     | UNARY_NEGATION Expression { reduceUnaryNegationExpression($1) }
-    | INCREMENT Expression { reducePrefixIncrementExpression($1) }
-    | DECREMENT Expression { reducePrefixDecrementExpression($1) }
+    | PREFIX_INCREMENT Expression { reducePrefixIncrementExpression($1) }
+    | PREFIX_DECREMENT Expression { reducePrefixDecrementExpression($1) }
     | TYPEOF WHITESPACE Expression { reduceTypeofExpression($2) }
     | VOID WHITESPACE Expression { reduceVoidExpression($2) }
-    | DELETE WHITESPACE Expression { reduceDeleteExpression($2) }
+    | DELETE WHITESPACE LValue { reduceDeleteExpression($2) }
     | AWAIT WHITESPACE Expression { reduceAwaitExpression($2) }
 
 ;
 ; Number expressions.
 ;
-Expression -> NUMBER_INTEGER { reduceIntegerNumberExpression }
+ValueExpression -> NumberExpression
+NumberExpression -> NUMBER_INTEGER { reduceIntegerNumberExpression }
     | NUMBER_FLOAT { reduceFloatNumberExpression }
     | NUMBER_OCTAL { reduceOctalNumberExpression }
 
+;
+; String expressions.
+ObjectLikeValueExpression -> StringExpression
+StringExpression -> STRING_DOUBLEQUOTE { reduceDoubleQuotedStringExpression($0) }
+    | STRING_SINGLEQUOTE { reduceSingleQuotedStringExpression($0) }
