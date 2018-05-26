@@ -33,6 +33,7 @@ Expression -> NewExpression
 NewExpression -> NEW WHITESPACE PathExpression PAREN_OPEN ArgumentList PAREN_CLOSE { reduceNewExpression($2, $4) }
     | NEW WHITESPACE PathExpression PAREN_OPEN PAREN_CLOSE { reduceNewExpression($2) }
     | NEW WHITESPACE PathExpression { reduceNewExpression($2) }
+    | NEW WHITESPACE NewExpression { reduceNewExpression($2) }
 
 ;
 ; Function call expression.

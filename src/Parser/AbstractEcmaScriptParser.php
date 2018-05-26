@@ -1274,6 +1274,12 @@ abstract class AbstractEcmaScriptParser
                 }
                 goto st17;
             }
+            if (substr_compare($string, 'new', $o, 3) === 0) {
+                $sts[] = 16;
+                $os[] = array('new');
+                $o += 3;
+                goto st16;
+            }
             if (preg_match('([a-zA-Z_$][a-zA-Z_0-9$]*)ADs', $string, $m, 0, $o)) {
                 $sts[] = 18;
                 $os[] = $m;
@@ -1288,18 +1294,18 @@ abstract class AbstractEcmaScriptParser
         $els = explode("\n", substr($string, 0, $o));
         $el = count($els);
         $ec = strlen(array_pop($els)) + 1;
-        throw new \Exception('Expect ( or IDENTIFIER ([a-zA-Z_$][a-zA-Z_0-9$]*) at line ' . $el . ', column ' . $ec);
+        throw new \Exception('Expect new, ( or IDENTIFIER ([a-zA-Z_$][a-zA-Z_0-9$]*) at line ' . $el . ', column ' . $ec);
         st27:
         if ($l > $o) {
             if (substr_compare($string, ')', $o, 1) === 0) {
-                $sts[] = 35;
+                $sts[] = 36;
                 $os[] = array(')');
                 $o += 1;
                 if (($ml = strspn($string, '
 	 ', $o)) > 0) {
                     $o += $ml;
                 }
-                goto st35;
+                goto st36;
             }
         }
         $els = explode("\n", substr($string, 0, $o));
@@ -1416,24 +1422,24 @@ abstract class AbstractEcmaScriptParser
         st29:
         if ($l > $o) {
             if (substr_compare($string, ')', $o, 1) === 0) {
-                $sts[] = 36;
+                $sts[] = 37;
                 $os[] = array(')');
                 $o += 1;
                 if (($ml = strspn($string, '
 	 ', $o)) > 0) {
                     $o += $ml;
                 }
-                goto st36;
+                goto st37;
             }
             if (substr_compare($string, ',', $o, 1) === 0) {
-                $sts[] = 37;
+                $sts[] = 38;
                 $os[] = array(',');
                 $o += 1;
                 if (($ml = strspn($string, '
 	 ', $o)) > 0) {
                     $o += $ml;
                 }
-                goto st37;
+                goto st38;
             }
         }
         $els = explode("\n", substr($string, 0, $o));
@@ -1586,14 +1592,14 @@ abstract class AbstractEcmaScriptParser
         st33:
         if ($l > $o) {
             if (substr_compare($string, ']', $o, 1) === 0) {
-                $sts[] = 38;
+                $sts[] = 39;
                 $os[] = array(']');
                 $o += 1;
                 if (($ml = strspn($string, '
 	 ', $o)) > 0) {
                     $o += $ml;
                 }
-                goto st38;
+                goto st39;
             }
         }
         $els = explode("\n", substr($string, 0, $o));
@@ -1603,14 +1609,14 @@ abstract class AbstractEcmaScriptParser
         st34:
         if ($l > $o) {
             if (substr_compare($string, '(', $o, 1) === 0) {
-                $sts[] = 39;
+                $sts[] = 40;
                 $os[] = array('(');
                 $o += 1;
                 if (($ml = strspn($string, '
 	 ', $o)) > 0) {
                     $o += $ml;
                 }
-                goto st39;
+                goto st40;
             }
             if (substr_compare($string, ')', $o, 1) === 0) {
                 $r2 = array_pop($os);
@@ -1679,6 +1685,53 @@ abstract class AbstractEcmaScriptParser
         throw new \Exception('Expect (, ., [, ;, ), ] or , at line ' . $el . ', column ' . $ec);
         st35:
         if ($l > $o) {
+            if (substr_compare($string, ')', $o, 1) === 0) {
+                $r2 = array_pop($os);
+                $r1 = array_pop($os);
+                $r0 = array_pop($os);
+                $os[] = $this->reduceNewExpression($r2);
+                array_pop($sts);
+                array_pop($sts);
+                array_pop($sts);
+                goto gt5;
+            }
+            if (substr_compare($string, ']', $o, 1) === 0) {
+                $r2 = array_pop($os);
+                $r1 = array_pop($os);
+                $r0 = array_pop($os);
+                $os[] = $this->reduceNewExpression($r2);
+                array_pop($sts);
+                array_pop($sts);
+                array_pop($sts);
+                goto gt5;
+            }
+            if (substr_compare($string, ',', $o, 1) === 0) {
+                $r2 = array_pop($os);
+                $r1 = array_pop($os);
+                $r0 = array_pop($os);
+                $os[] = $this->reduceNewExpression($r2);
+                array_pop($sts);
+                array_pop($sts);
+                array_pop($sts);
+                goto gt5;
+            }
+            if (substr_compare($string, ';', $o, 1) === 0) {
+                $r2 = array_pop($os);
+                $r1 = array_pop($os);
+                $r0 = array_pop($os);
+                $os[] = $this->reduceNewExpression($r2);
+                array_pop($sts);
+                array_pop($sts);
+                array_pop($sts);
+                goto gt5;
+            }
+        }
+        $els = explode("\n", substr($string, 0, $o));
+        $el = count($els);
+        $ec = strlen(array_pop($els)) + 1;
+        throw new \Exception('Expect ;, ), ] or , at line ' . $el . ', column ' . $ec);
+        st36:
+        if ($l > $o) {
             if (substr_compare($string, '(', $o, 1) === 0) {
                 $r2 = array_pop($os);
                 $r1 = array_pop($os);
@@ -1754,7 +1807,7 @@ abstract class AbstractEcmaScriptParser
         $el = count($els);
         $ec = strlen(array_pop($els)) + 1;
         throw new \Exception('Expect ;, ., [, (, ), ] or , at line ' . $el . ', column ' . $ec);
-        st36:
+        st37:
         if ($l > $o) {
             if (substr_compare($string, ')', $o, 1) === 0) {
                 $r3 = array_pop($os);
@@ -1809,7 +1862,7 @@ abstract class AbstractEcmaScriptParser
         $el = count($els);
         $ec = strlen(array_pop($els)) + 1;
         throw new \Exception('Expect ;, ), ] or , at line ' . $el . ', column ' . $ec);
-        st37:
+        st38:
         if ($l > $o) {
             if (substr_compare($string, '(', $o, 1) === 0) {
                 $sts[] = 17;
@@ -1872,7 +1925,7 @@ abstract class AbstractEcmaScriptParser
         $el = count($els);
         $ec = strlen(array_pop($els)) + 1;
         throw new \Exception('Expect NUMBER_INTEGER ([0-9]+), NUMBER_FLOAT ([0-9]+\\.[0-9]+), NUMBER_OCTAL (0x[0-9abcdefABCDEF]+), new, ( or IDENTIFIER ([a-zA-Z_$][a-zA-Z_0-9$]*) at line ' . $el . ', column ' . $ec);
-        st38:
+        st39:
         if ($l > $o) {
             if (substr_compare($string, '(', $o, 1) === 0) {
                 $r3 = array_pop($os);
@@ -1963,7 +2016,7 @@ abstract class AbstractEcmaScriptParser
         $el = count($els);
         $ec = strlen(array_pop($els)) + 1;
         throw new \Exception('Expect ;, ., [, (, ), ] or , at line ' . $el . ', column ' . $ec);
-        st39:
+        st40:
         if ($l > $o) {
             if (substr_compare($string, '(', $o, 1) === 0) {
                 $sts[] = 17;
@@ -1976,14 +2029,14 @@ abstract class AbstractEcmaScriptParser
                 goto st17;
             }
             if (substr_compare($string, ')', $o, 1) === 0) {
-                $sts[] = 42;
+                $sts[] = 43;
                 $os[] = array(')');
                 $o += 1;
                 if (($ml = strspn($string, '
 	 ', $o)) > 0) {
                     $o += $ml;
                 }
-                goto st42;
+                goto st43;
             }
             if (substr_compare($string, 'new', $o, 3) === 0) {
                 $sts[] = 16;
@@ -2036,54 +2089,27 @@ abstract class AbstractEcmaScriptParser
         $el = count($els);
         $ec = strlen(array_pop($els)) + 1;
         throw new \Exception('Expect ), NUMBER_INTEGER ([0-9]+), NUMBER_FLOAT ([0-9]+\\.[0-9]+), NUMBER_OCTAL (0x[0-9abcdefABCDEF]+), new, ( or IDENTIFIER ([a-zA-Z_$][a-zA-Z_0-9$]*) at line ' . $el . ', column ' . $ec);
-        st40:
-        if ($l > $o) {
-            if (substr_compare($string, ')', $o, 1) === 0) {
-                $r2 = array_pop($os);
-                $r1 = array_pop($os);
-                $r0 = array_pop($os);
-                $os[] = $this->arrayPush($r0, $r2);
-                array_pop($sts);
-                array_pop($sts);
-                array_pop($sts);
-                goto gt11;
-            }
-            if (substr_compare($string, ',', $o, 1) === 0) {
-                $r2 = array_pop($os);
-                $r1 = array_pop($os);
-                $r0 = array_pop($os);
-                $os[] = $this->arrayPush($r0, $r2);
-                array_pop($sts);
-                array_pop($sts);
-                array_pop($sts);
-                goto gt11;
-            }
-        }
-        $els = explode("\n", substr($string, 0, $o));
-        $el = count($els);
-        $ec = strlen(array_pop($els)) + 1;
-        throw new \Exception('Expect ) or , at line ' . $el . ', column ' . $ec);
         st41:
         if ($l > $o) {
             if (substr_compare($string, ')', $o, 1) === 0) {
-                $sts[] = 43;
-                $os[] = array(')');
-                $o += 1;
-                if (($ml = strspn($string, '
-	 ', $o)) > 0) {
-                    $o += $ml;
-                }
-                goto st43;
+                $r2 = array_pop($os);
+                $r1 = array_pop($os);
+                $r0 = array_pop($os);
+                $os[] = $this->arrayPush($r0, $r2);
+                array_pop($sts);
+                array_pop($sts);
+                array_pop($sts);
+                goto gt11;
             }
             if (substr_compare($string, ',', $o, 1) === 0) {
-                $sts[] = 37;
-                $os[] = array(',');
-                $o += 1;
-                if (($ml = strspn($string, '
-	 ', $o)) > 0) {
-                    $o += $ml;
-                }
-                goto st37;
+                $r2 = array_pop($os);
+                $r1 = array_pop($os);
+                $r0 = array_pop($os);
+                $os[] = $this->arrayPush($r0, $r2);
+                array_pop($sts);
+                array_pop($sts);
+                array_pop($sts);
+                goto gt11;
             }
         }
         $els = explode("\n", substr($string, 0, $o));
@@ -2091,6 +2117,33 @@ abstract class AbstractEcmaScriptParser
         $ec = strlen(array_pop($els)) + 1;
         throw new \Exception('Expect ) or , at line ' . $el . ', column ' . $ec);
         st42:
+        if ($l > $o) {
+            if (substr_compare($string, ')', $o, 1) === 0) {
+                $sts[] = 44;
+                $os[] = array(')');
+                $o += 1;
+                if (($ml = strspn($string, '
+	 ', $o)) > 0) {
+                    $o += $ml;
+                }
+                goto st44;
+            }
+            if (substr_compare($string, ',', $o, 1) === 0) {
+                $sts[] = 38;
+                $os[] = array(',');
+                $o += 1;
+                if (($ml = strspn($string, '
+	 ', $o)) > 0) {
+                    $o += $ml;
+                }
+                goto st38;
+            }
+        }
+        $els = explode("\n", substr($string, 0, $o));
+        $el = count($els);
+        $ec = strlen(array_pop($els)) + 1;
+        throw new \Exception('Expect ) or , at line ' . $el . ', column ' . $ec);
+        st43:
         if ($l > $o) {
             if (substr_compare($string, ')', $o, 1) === 0) {
                 $r4 = array_pop($os);
@@ -2153,7 +2206,7 @@ abstract class AbstractEcmaScriptParser
         $el = count($els);
         $ec = strlen(array_pop($els)) + 1;
         throw new \Exception('Expect ;, ), ] or , at line ' . $el . ', column ' . $ec);
-        st43:
+        st44:
         if ($l > $o) {
             if (substr_compare($string, ')', $o, 1) === 0) {
                 $r5 = array_pop($os);
@@ -2262,10 +2315,10 @@ abstract class AbstractEcmaScriptParser
             case 25:
                 $sts[] = 33;
                 goto st33;
-            case 37:
-                $sts[] = 40;
-                goto st40;
-            case 39:
+            case 38:
+                $sts[] = 41;
+                goto st41;
+            case 40:
                 $sts[] = 31;
                 goto st31;
         }
@@ -2289,10 +2342,10 @@ abstract class AbstractEcmaScriptParser
             case 26:
                 $sts[] = 34;
                 goto st34;
-            case 37:
+            case 38:
                 $sts[] = 6;
                 goto st6;
-            case 39:
+            case 40:
                 $sts[] = 6;
                 goto st6;
         }
@@ -2313,10 +2366,13 @@ abstract class AbstractEcmaScriptParser
             case 25:
                 $sts[] = 7;
                 goto st7;
-            case 37:
+            case 26:
+                $sts[] = 35;
+                goto st35;
+            case 38:
                 $sts[] = 7;
                 goto st7;
-            case 39:
+            case 40:
                 $sts[] = 7;
                 goto st7;
         }
@@ -2337,10 +2393,10 @@ abstract class AbstractEcmaScriptParser
             case 25:
                 $sts[] = 8;
                 goto st8;
-            case 37:
+            case 38:
                 $sts[] = 8;
                 goto st8;
-            case 39:
+            case 40:
                 $sts[] = 8;
                 goto st8;
         }
@@ -2364,10 +2420,10 @@ abstract class AbstractEcmaScriptParser
             case 26:
                 $sts[] = 12;
                 goto st12;
-            case 37:
+            case 38:
                 $sts[] = 12;
                 goto st12;
-            case 39:
+            case 40:
                 $sts[] = 12;
                 goto st12;
         }
@@ -2391,10 +2447,10 @@ abstract class AbstractEcmaScriptParser
             case 26:
                 $sts[] = 13;
                 goto st13;
-            case 37:
+            case 38:
                 $sts[] = 13;
                 goto st13;
-            case 39:
+            case 40:
                 $sts[] = 13;
                 goto st13;
         }
@@ -2418,10 +2474,10 @@ abstract class AbstractEcmaScriptParser
             case 26:
                 $sts[] = 14;
                 goto st14;
-            case 37:
+            case 38:
                 $sts[] = 14;
                 goto st14;
-            case 39:
+            case 40:
                 $sts[] = 14;
                 goto st14;
         }
@@ -2445,10 +2501,10 @@ abstract class AbstractEcmaScriptParser
             case 26:
                 $sts[] = 15;
                 goto st15;
-            case 37:
+            case 38:
                 $sts[] = 15;
                 goto st15;
-            case 39:
+            case 40:
                 $sts[] = 15;
                 goto st15;
         }
@@ -2457,9 +2513,9 @@ abstract class AbstractEcmaScriptParser
             case 23:
                 $sts[] = 29;
                 goto st29;
-            case 39:
-                $sts[] = 41;
-                goto st41;
+            case 40:
+                $sts[] = 42;
+                goto st42;
         }
     }
     protected abstract function arrayPush($p0, $p1);
