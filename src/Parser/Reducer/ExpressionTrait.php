@@ -7,6 +7,8 @@ use Charisma\Parser\Node\Expression\FunctionCallExpression;
 use Charisma\Parser\Node\Expression\MemberAccessExpression;
 use Charisma\Parser\Node\Expression\NewExpression;
 use Charisma\Parser\Node\Expression\NumberExpression;
+use Charisma\Parser\Node\Expression\PostfixDecrementExpression;
+use Charisma\Parser\Node\Expression\PostfixIncrementExpression;
 use Charisma\Parser\Node\Expression\VariableAccessExpression;
 
 trait ExpressionTrait
@@ -34,6 +36,16 @@ trait ExpressionTrait
     protected function reduceVariableAccessExpression($name)
     {
         return new VariableAccessExpression($name[0]);
+    }
+
+    protected function reducePostfixIncrementExpression($expression)
+    {
+        return new PostfixIncrementExpression($expression);
+    }
+
+    protected function reducePostfixDecrementExpression($expression)
+    {
+        return new PostfixDecrementExpression($expression);
     }
 
     protected function reduceIntegerNumberExpression($number)

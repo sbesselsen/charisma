@@ -1,4 +1,6 @@
 operator DOT 19 left
+operator INCREMENT 17 nonassoc
+operator DECREMENT 17 nonassoc
 
 Expression -> PathExpression
 
@@ -6,24 +8,26 @@ Expression -> PathExpression
 ; Expressions.
 ;
 PathExpression -> ParenExpression
+PathExpression -> LValue
+
 ParenExpression -> PAREN_OPEN Expression PAREN_CLOSE { $1 }
 
 ;
 ; Member access expressions.
 ;
-PathExpression -> MemberAccessExpression
+LValue -> MemberAccessExpression
 MemberAccessExpression -> PathExpression DOT IDENTIFIER { reduceMemberAccessExpression($0, $2) }
 
 ;
 ; Computed member access expressions.
 ;
-PathExpression -> ComputedMemberAccessExpression
+LValue -> ComputedMemberAccessExpression
 ComputedMemberAccessExpression -> PathExpression BLOCK_OPEN Expression BLOCK_CLOSE { reduceComputedMemberAccessExpression($0, $2) }
 
 ;
 ; Variable access expressions.
 ;
-PathExpression -> VariableAccessExpression
+LValue -> VariableAccessExpression
 VariableAccessExpression -> IDENTIFIER { reduceVariableAccessExpression($0) }
 
 ;
@@ -41,6 +45,12 @@ NewExpression -> NEW WHITESPACE PathExpression PAREN_OPEN ArgumentList PAREN_CLO
 Expression -> FunctionCallExpression
 FunctionCallExpression -> PathExpression PAREN_OPEN ArgumentList PAREN_CLOSE { reduceFunctionCallExpression($0, $2) }
 FunctionCallExpression -> PathExpression PAREN_OPEN PAREN_CLOSE { reduceFunctionCallExpression($0) }
+
+;
+; Postfix increment/decrement expression.
+;
+Expression -> LValue INCREMENT { reducePostfixIncrementExpression($0) }
+Expression -> LValue DECREMENT { reducePostfixDecrementExpression($0) }
 
 ;
 ; Number expressions.
