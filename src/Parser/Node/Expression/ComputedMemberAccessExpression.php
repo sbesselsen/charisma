@@ -2,7 +2,7 @@
 
 namespace Charisma\Parser\Node\Expression;
 
-final class ComputedMemberAccessExpression extends Expression
+final class ComputedMemberAccessExpression extends LValueExpression
 {
     /**
      * The expression.

@@ -7,10 +7,12 @@ use Charisma\Parser\Node\Expression\BitwiseNotExpression;
 use Charisma\Parser\Node\Expression\ComputedMemberAccessExpression;
 use Charisma\Parser\Node\Expression\DeleteExpression;
 use Charisma\Parser\Node\Expression\FunctionCallExpression;
+use Charisma\Parser\Node\Expression\LValueExpression;
 use Charisma\Parser\Node\Expression\MemberAccessExpression;
 use Charisma\Parser\Node\Expression\NewExpression;
 use Charisma\Parser\Node\Expression\NotExpression;
 use Charisma\Parser\Node\Expression\NumberExpression;
+use Charisma\Parser\Node\Expression\ParenExpression;
 use Charisma\Parser\Node\Expression\PostfixDecrementExpression;
 use Charisma\Parser\Node\Expression\PostfixIncrementExpression;
 use Charisma\Parser\Node\Expression\PrefixDecrementExpression;
@@ -24,8 +26,16 @@ use Charisma\Parser\Node\Expression\VoidExpression;
 
 trait ExpressionTrait
 {
+    protected function reduceParenExpression($expression)
+    {
+        return new ParenExpression($expression);
+    }
+
     protected function reduceNewExpression($constructor, $argumentList = null)
     {
+        if ($constructor instanceof FunctionCallExpression) {
+            return new NewExpression($constructor->expression, $constructor->arguments);
+        }
         return new NewExpression($constructor, $argumentList ?? []);
     }
 
@@ -51,11 +61,17 @@ trait ExpressionTrait
 
     protected function reducePostfixIncrementExpression($expression)
     {
+        if (!$expression instanceof LValueExpression) {
+            throw new \Exception('Can only increment LValue');
+        }
         return new PostfixIncrementExpression($expression);
     }
 
     protected function reducePostfixDecrementExpression($expression)
     {
+        if (!$expression instanceof LValueExpression) {
+            throw new \Exception('Can only decrement LValue');
+        }
         return new PostfixDecrementExpression($expression);
     }
 
@@ -81,11 +97,17 @@ trait ExpressionTrait
 
     protected function reducePrefixIncrementExpression($expression)
     {
+        if (!$expression instanceof LValueExpression) {
+            throw new \Exception('Can only increment LValue');
+        }
         return new PrefixIncrementExpression($expression);
     }
 
     protected function reducePrefixDecrementExpression($expression)
     {
+        if (!$expression instanceof LValueExpression) {
+            throw new \Exception('Can only decrement LValue');
+        }
         return new PrefixDecrementExpression($expression);
     }
 
@@ -101,6 +123,9 @@ trait ExpressionTrait
 
     protected function reduceDeleteExpression($expression)
     {
+        if (!$expression instanceof LValueExpression) {
+            throw new \Exception('Can only delete LValue');
+        }
         return new DeleteExpression($expression);
     }
 

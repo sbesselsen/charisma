@@ -2,7 +2,7 @@
 
 namespace Charisma\Parser\Node\Expression;
 
-final class VariableAccessExpression extends Expression
+final class VariableAccessExpression extends LValueExpression
 {
     /**
      * The variable name.

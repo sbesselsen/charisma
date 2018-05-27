@@ -1,5 +1,3 @@
-; Paren open that has priority over a normal paren open; used for new expressions.
-token PRIO_PAREN_OPEN (
 token PAREN_OPEN (
 token PAREN_CLOSE )
 token BLOCK_OPEN [

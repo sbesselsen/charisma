@@ -27,4 +27,9 @@ final class EcmaScriptParser extends AbstractEcmaScriptParser
     {
         return [];
     }
+
+    protected function debugLog($message)
+    {
+        echo '> ' . $message . PHP_EOL;
+    }
 }
