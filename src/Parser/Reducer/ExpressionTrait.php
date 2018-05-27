@@ -2,20 +2,46 @@
 
 namespace Charisma\Parser\Reducer;
 
+use Charisma\Parser\Node\Expression\AddAssignmentExpression;
 use Charisma\Parser\Node\Expression\AddExpression;
+use Charisma\Parser\Node\Expression\AssignmentExpression;
 use Charisma\Parser\Node\Expression\AwaitExpression;
+use Charisma\Parser\Node\Expression\BitwiseAndAssignmentExpression;
+use Charisma\Parser\Node\Expression\BitwiseAndExpression;
+use Charisma\Parser\Node\Expression\BitwiseLeftShiftAssignmentExpression;
 use Charisma\Parser\Node\Expression\BitwiseLeftShiftExpression;
 use Charisma\Parser\Node\Expression\BitwiseNotExpression;
+use Charisma\Parser\Node\Expression\BitwiseOrAssignmentExpression;
+use Charisma\Parser\Node\Expression\BitwiseOrExpression;
+use Charisma\Parser\Node\Expression\BitwiseRightShiftAssignmentExpression;
 use Charisma\Parser\Node\Expression\BitwiseRightShiftExpression;
+use Charisma\Parser\Node\Expression\BitwiseUnsignedRightShiftAssignmentExpression;
 use Charisma\Parser\Node\Expression\BitwiseUnsignedRightShiftExpression;
+use Charisma\Parser\Node\Expression\BitwiseXorAssignmentExpression;
+use Charisma\Parser\Node\Expression\BitwiseXorExpression;
 use Charisma\Parser\Node\Expression\ComputedMemberAccessExpression;
+use Charisma\Parser\Node\Expression\ConditionalExpression;
 use Charisma\Parser\Node\Expression\DeleteExpression;
+use Charisma\Parser\Node\Expression\DivideAssignmentExpression;
 use Charisma\Parser\Node\Expression\DivideExpression;
+use Charisma\Parser\Node\Expression\EqualityExpression;
+use Charisma\Parser\Node\Expression\ExponentAssignmentExpression;
 use Charisma\Parser\Node\Expression\ExponentExpression;
 use Charisma\Parser\Node\Expression\FunctionCallExpression;
+use Charisma\Parser\Node\Expression\GreaterThanExpression;
+use Charisma\Parser\Node\Expression\GreaterThanOrEqualExpression;
+use Charisma\Parser\Node\Expression\InequalityExpression;
+use Charisma\Parser\Node\Expression\InExpression;
+use Charisma\Parser\Node\Expression\InstanceofExpression;
+use Charisma\Parser\Node\Expression\LessThanExpression;
+use Charisma\Parser\Node\Expression\LessThanOrEqualExpression;
+use Charisma\Parser\Node\Expression\LogicalAndExpression;
+use Charisma\Parser\Node\Expression\LogicalOrExpression;
 use Charisma\Parser\Node\Expression\LValueExpression;
 use Charisma\Parser\Node\Expression\MemberAccessExpression;
+use Charisma\Parser\Node\Expression\ModuloAssignmentExpression;
 use Charisma\Parser\Node\Expression\ModuloExpression;
+use Charisma\Parser\Node\Expression\MultiplyAssignmentExpression;
 use Charisma\Parser\Node\Expression\MultiplyExpression;
 use Charisma\Parser\Node\Expression\NewExpression;
 use Charisma\Parser\Node\Expression\NotExpression;
@@ -25,13 +51,18 @@ use Charisma\Parser\Node\Expression\PostfixDecrementExpression;
 use Charisma\Parser\Node\Expression\PostfixIncrementExpression;
 use Charisma\Parser\Node\Expression\PrefixDecrementExpression;
 use Charisma\Parser\Node\Expression\PrefixIncrementExpression;
+use Charisma\Parser\Node\Expression\StrictEqualityExpression;
+use Charisma\Parser\Node\Expression\StrictInequalityExpression;
 use Charisma\Parser\Node\Expression\StringExpression;
+use Charisma\Parser\Node\Expression\SubtractAssignmentExpression;
 use Charisma\Parser\Node\Expression\SubtractExpression;
 use Charisma\Parser\Node\Expression\TypeofExpression;
 use Charisma\Parser\Node\Expression\UnaryNegationExpression;
 use Charisma\Parser\Node\Expression\UnaryPlusExpression;
 use Charisma\Parser\Node\Expression\VariableAccessExpression;
 use Charisma\Parser\Node\Expression\VoidExpression;
+use Charisma\Parser\Node\Expression\YieldExpression;
+use Charisma\Parser\Node\Expression\YieldStarExpression;
 
 trait ExpressionTrait
 {
@@ -186,6 +217,161 @@ trait ExpressionTrait
     protected function reduceBitwiseUnsignedRightShiftExpression($left, $right)
     {
         return new BitwiseUnsignedRightShiftExpression($left, $right);
+    }
+
+    protected function reduceYieldExpression($expression)
+    {
+        return new YieldExpression($expression);
+    }
+
+    protected function reduceYieldStarExpression($expression)
+    {
+        return new YieldStarExpression($expression);
+    }
+
+    protected function reduceLessThanExpression($left, $right)
+    {
+        return new LessThanExpression($left, $right);
+    }
+
+    protected function reduceLessThanOrEqualExpression($left, $right)
+    {
+        return new LessThanOrEqualExpression($left, $right);
+    }
+
+    protected function reduceGreaterThanExpression($left, $right)
+    {
+        return new GreaterThanExpression($left, $right);
+    }
+
+    protected function reduceGreaterThanOrEqualExpression($left, $right)
+    {
+        return new GreaterThanOrEqualExpression($left, $right);
+    }
+
+    protected function reduceInExpression($left, $right)
+    {
+        return new InExpression($left, $right);
+    }
+
+    protected function reduceInstanceofExpression($left, $right)
+    {
+        return new InstanceofExpression($left, $right);
+    }
+
+    protected function reduceEqualityExpression($left, $right)
+    {
+        return new EqualityExpression($left, $right);
+    }
+
+    protected function reduceInqualityExpression($left, $right)
+    {
+        return new InequalityExpression($left, $right);
+    }
+
+    protected function reduceStrictEqualityExpression($left, $right)
+    {
+        return new StrictEqualityExpression($left, $right);
+    }
+
+    protected function reduceStrictInqualityExpression($left, $right)
+    {
+        return new StrictInequalityExpression($left, $right);
+    }
+
+    protected function reduceBitwiseAndExpression($left, $right)
+    {
+        return new BitwiseAndExpression($left, $right);
+    }
+
+    protected function reduceBitwiseXorExpression($left, $right)
+    {
+        return new BitwiseXorExpression($left, $right);
+    }
+
+    protected function reduceBitwiseOrExpression($left, $right)
+    {
+        return new BitwiseOrExpression($left, $right);
+    }
+
+    protected function reduceLogicalAndExpression($left, $right)
+    {
+        return new LogicalAndExpression($left, $right);
+    }
+
+    protected function reduceLogicalOrExpression($left, $right)
+    {
+        return new LogicalOrExpression($left, $right);
+    }
+
+    protected function reduceAssignmentExpression($left, $right)
+    {
+        return new AssignmentExpression($left, $right);
+    }
+
+    protected function reduceAddAssignmentExpression($left, $right)
+    {
+        return new AddAssignmentExpression($left, $right);
+    }
+
+    protected function reduceSubtractAssignmentExpression($left, $right)
+    {
+        return new SubtractAssignmentExpression($left, $right);
+    }
+
+    protected function reduceExponentAssignmentExpression($left, $right)
+    {
+        return new ExponentAssignmentExpression($left, $right);
+    }
+
+    protected function reduceMultiplyAssignmentExpression($left, $right)
+    {
+        return new MultiplyAssignmentExpression($left, $right);
+    }
+
+    protected function reduceDivideAssignmentExpression($left, $right)
+    {
+        return new DivideAssignmentExpression($left, $right);
+    }
+
+    protected function reduceModuloAssignmentExpression($left, $right)
+    {
+        return new ModuloAssignmentExpression($left, $right);
+    }
+
+    protected function reduceBitwiseLeftShiftAssignmentExpression($left, $right)
+    {
+        return new BitwiseLeftShiftAssignmentExpression($left, $right);
+    }
+
+    protected function reduceBitwiseRightShiftAssignmentExpression($left, $right)
+    {
+        return new BitwiseRightShiftAssignmentExpression($left, $right);
+    }
+
+    protected function reduceBitwiseUnsignedRightShiftAssignmentExpression($left, $right)
+    {
+        return new BitwiseUnsignedRightShiftAssignmentExpression($left, $right);
+    }
+
+    protected function reduceBitwiseAndAssignmentExpression($left, $right)
+    {
+        return new BitwiseAndAssignmentExpression($left, $right);
+    }
+
+    protected function reduceBitwiseXorAssignmentExpression($left, $right)
+    {
+        return new BitwiseXorAssignmentExpression($left, $right);
+    }
+
+    protected function reduceBitwiseOrAssignmentExpression($left, $right)
+    {
+        return new BitwiseOrAssignmentExpression($left, $right);
+    }
+
+    protected function reduceConditionalExpression($condition, $if, $else)
+    {
+        return new ConditionalExpression($condition, $if, $else);
     }
 
     protected function reduceDoubleQuotedStringExpression($str) {

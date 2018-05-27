@@ -31,6 +31,46 @@ operator SHIFT_LEFT 12 left
 operator SHIFT_RIGHT 12 left
 operator SHIFT_RIGHT_UNSIGNED 12 left
 
+operator LT 11 left
+operator LTE 11 left
+operator GT 11 left
+operator GTE 11 left
+operator IN_ 11 left
+operator INSTANCEOF_ 11 left
+
+operator EQ 10 left
+operator NEQ 10 left
+operator STRICT_EQ 10 left
+operator STRICT_NEQ 10 left
+
+operator BITWISE_AND 9 left
+operator BITWISE_XOR 8 left
+operator BITWISE_OR 7 left
+operator AND 6 left
+operator OR 5 left
+
+operator QUESTIONMARK 4 right
+operator COLON 4 right
+
+operator ASSIGN 3 right
+operator ADD_ASSIGN 3 right
+operator SUBTRACT_ASSIGN 3 right
+operator EXPONENT_ASSIGN 3 right
+operator MULTIPLY_ASSIGN 3 right
+operator DIVIDE_ASSIGN 3 right
+operator MODULO_ASSIGN 3 right
+operator SHIFT_LEFT_ASSIGN 3 right
+operator SHIFT_RIGHT_ASSIGN 3 right
+operator SHIFT_RIGHT_UNSIGNED_ASSIGN 3 right
+operator BITWISE_AND_ASSIGN 3 right
+operator BITWISE_XOR_ASSIGN 3 right
+operator BITWISE_OR_ASSIGN 3 right
+
+operator YIELD_ 2 right
+operator YIELD_STAR_ 2 right
+
+operator COMMA 1 left
+
 ;
 ; Paren expression.
 ;
@@ -81,6 +121,8 @@ Expression -> NOT Expression { reduceNotExpression($1) }
     | VOID_ Expression { reduceVoidExpression($1) }
     | DELETE_ Expression { reduceDeleteExpression($1) }
     | AWAIT_ Expression { reduceAwaitExpression($1) }
+    | YIELD_ Expression { reduceYieldExpression($1) }
+    | YIELD_STAR_ Expression { reduceYieldStarExpression($1) }
 
 ;
 ; All of the binary expression operators.
@@ -94,6 +136,39 @@ Expression -> Expression EXPONENT Expression { reduceExponentExpression($0, $2) 
     | Expression SHIFT_LEFT Expression { reduceBitwiseLeftShiftExpression($0, $2) }
     | Expression SHIFT_RIGHT Expression { reduceBitwiseRightShiftExpression($0, $2) }
     | Expression SHIFT_RIGHT_UNSIGNED Expression { reduceBitwiseUnsignedRightShiftExpression($0, $2) }
+    | Expression LT Expression { reduceLessThanExpression($0, $2) }
+    | Expression LTE Expression { reduceLessThanOrEqualExpression($0, $2) }
+    | Expression GT Expression { reduceGreaterThanExpression($0, $2) }
+    | Expression GTE Expression { reduceGreaterThanOrEqualExpression($0, $2) }
+    | Expression IN_ Expression { reduceInExpression($0, $2) }
+    | Expression INSTANCEOF_ Expression { reduceInstanceofExpression($0, $2) }
+    | Expression EQ Expression { reduceEqualityExpression($0, $2) }
+    | Expression NEQ Expression { reduceInqualityExpression($0, $2) }
+    | Expression STRICT_EQ Expression { reduceStrictEqualityExpression($0, $2) }
+    | Expression STRICT_NEQ Expression { reduceStrictInqualityExpression($0, $2) }
+    | Expression BITWISE_AND Expression { reduceBitwiseAndExpression($0, $2) }
+    | Expression BITWISE_XOR Expression { reduceBitwiseXorExpression($0, $2) }
+    | Expression BITWISE_OR Expression { reduceBitwiseOrExpression($0, $2) }
+    | Expression AND Expression { reduceLogicalAndExpression($0, $2) }
+    | Expression OR Expression { reduceLogicalOrExpression($0, $2) }
+    | Expression ASSIGN Expression { reduceAssignmentExpression($0, $2) }
+    | Expression ADD_ASSIGN Expression { reduceAddAssignmentExpression($0, $2) }
+    | Expression SUBTRACT_ASSIGN Expression { reduceSubtractAssignmentExpression($0, $2) }
+    | Expression EXPONENT_ASSIGN Expression { reduceExponentAssignmentExpression($0, $2) }
+    | Expression MULTIPLY_ASSIGN Expression { reduceMultiplyAssignmentExpression($0, $2) }
+    | Expression DIVIDE_ASSIGN Expression { reduceDivideAssignmentExpression($0, $2) }
+    | Expression MODULO_ASSIGN Expression { reduceModuloAssignmentExpression($0, $2) }
+    | Expression SHIFT_LEFT_ASSIGN Expression { reduceBitwiseLeftShiftAssignmentExpression($0, $2) }
+    | Expression SHIFT_RIGHT_ASSIGN Expression { reduceBitwiseRightShiftAssignmentExpression($0, $2) }
+    | Expression SHIFT_RIGHT_UNSIGNED_ASSIGN Expression { reduceBitwiseUnsignedRightShiftAssignmentExpression($0, $2) }
+    | Expression BITWISE_AND_ASSIGN Expression { reduceBitwiseAndAssignmentExpression($0, $2) }
+    | Expression BITWISE_XOR_ASSIGN Expression { reduceBitwiseXorAssignmentExpression($0, $2) }
+    | Expression BITWISE_OR_ASSIGN Expression { reduceBitwiseOrAssignmentExpression($0, $2) }
+
+;
+; The one ternary expression.
+;
+Expression -> Expression QUESTIONMARK Expression COLON Expression { reduceConditionalExpression($0, $2, $4) }
 
 ;
 ; Number expressions.

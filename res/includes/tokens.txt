@@ -15,33 +15,42 @@ token EQ ==
 token NEQ !=
 token ASSIGN =
 token NOT !
+token SHIFT_LEFT_ASSIGN <<=
 token SHIFT_LEFT <<
 token LTE <=
 token LT <
+token SHIFT_RIGHT_UNSIGNED_ASSIGN >>>=
 token SHIFT_RIGHT_UNSIGNED >>>
+token SHIFT_RIGHT_ASSIGN >>=
 token SHIFT_RIGHT >>
 token GTE >=
 token GT >
 token AND &&
 token OR ||
-token BINARY_AND &
-token BINARY_OR |
+token BITWISE_AND_ASSIGN &=
+token BITWISE_AND &
+token BITWISE_XOR_ASSIGN ^=
+token BITWISE_XOR ^
+token BITWISE_OR_ASSIGN |=
+token BITWISE_OR |
 token INCREMENT ++
 token PREFIX_INCREMENT ++
-token INCREMENT_ASSIGN +=
+token ADD_ASSIGN +=
 token UNARY_PLUS +
 token ADD +
 token DECREMENT --
 token PREFIX_DECREMENT --
-token DECREMENT_ASSIGN -=
+token SUBTRACT_ASSIGN -=
 token UNARY_NEGATION -
 token SUBTRACT -
 token MULTIPLY_ASSIGN *=
+token EXPONENT_ASSIGN **=
 token EXPONENT **
 token MULTIPLY *
 token DIVIDE_ASSIGN /=
 token DIVIDE /
 token DOT .
+token MODULO_ASSIGN %=
 token MODULO %
 token TILDE ~
 
@@ -63,6 +72,8 @@ escaped exact token AWAIT_ await\s
 escaped exact token INSTANCEOF_ instanceof\s
 escaped exact token IN_ in\s
 escaped exact token OF_ of\s
+escaped exact token YIELD_STAR_ yield*\s
+escaped exact token YIELD_ yield\s
 token NULL null
 token UNDEFINED undefined
 token NAN NaN
