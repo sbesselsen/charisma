@@ -6,7 +6,6 @@ trait CodeBlockTrait
 {
     protected function reduceCodeBlockContent($p0)
     {
-        var_dump($p0);
-        exit;
+        return $p0;
     }
 }
