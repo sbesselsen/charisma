@@ -19,45 +19,34 @@ operator DELETE_ 16 right
 operator AWAIT_ 16 right
 
 ;
-; Expressions.
-;
-Expression -> MemberAccessExpression
-    | ComputedMemberAccessExpression
-    | VariableAccessExpression
-    | FunctionCallExpression
-    | ParenExpression
-    | NewExpression
-    | ValueExpression
-
-;
 ; Paren expression.
 ;
-ParenExpression -> PAREN_OPEN Expression PAREN_CLOSE { reduceParenExpression($1) }
+Expression -> PAREN_OPEN Expression PAREN_CLOSE { reduceParenExpression($1) }
 
 ;
 ; Member access expression.
 ;
-MemberAccessExpression -> Expression DOT IDENTIFIER { reduceMemberAccessExpression($0, $2) }
+Expression -> Expression DOT IDENTIFIER { reduceMemberAccessExpression($0, $2) }
 
 ;
 ; Computed member access expression.
 ;
-ComputedMemberAccessExpression -> Expression BLOCK_OPEN Expression BLOCK_CLOSE { reduceComputedMemberAccessExpression($0, $2) }
+Expression -> Expression BLOCK_OPEN Expression BLOCK_CLOSE { reduceComputedMemberAccessExpression($0, $2) }
 
 ;
 ; Variable access expression.
 ;
-VariableAccessExpression -> IDENTIFIER { reduceVariableAccessExpression($0) }
+Expression -> IDENTIFIER { reduceVariableAccessExpression($0) }
 
 ;
 ; New expression.
 ;
-NewExpression -> NEW_ Expression { reduceNewExpression($1) }
+Expression -> NEW_ Expression { reduceNewExpression($1) }
 
 ;
 ; Function call expression.
 ;
-FunctionCallExpression -> Expression PAREN_OPEN ArgumentList PAREN_CLOSE { reduceFunctionCallExpression($0, $2) }
+Expression -> Expression PAREN_OPEN ArgumentList PAREN_CLOSE { reduceFunctionCallExpression($0, $2) }
     | Expression PAREN_OPEN PAREN_CLOSE { reduceFunctionCallExpression($0) }
 
 ;
@@ -83,13 +72,11 @@ Expression -> NOT Expression { reduceNotExpression($1) }
 ;
 ; Number expressions.
 ;
-ValueExpression -> NumberExpression
-NumberExpression -> NUMBER_INTEGER { reduceIntegerNumberExpression }
+Expression -> NUMBER_INTEGER { reduceIntegerNumberExpression }
     | NUMBER_FLOAT { reduceFloatNumberExpression }
     | NUMBER_OCTAL { reduceOctalNumberExpression }
 
 ;
 ; String expressions.
-ObjectLikeValueExpression -> StringExpression
-StringExpression -> STRING_DOUBLEQUOTE { reduceDoubleQuotedStringExpression($0) }
+Expression -> STRING_DOUBLEQUOTE { reduceDoubleQuotedStringExpression($0) }
     | STRING_SINGLEQUOTE { reduceSingleQuotedStringExpression($0) }
