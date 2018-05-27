@@ -2,13 +2,21 @@
 
 namespace Charisma\Parser\Reducer;
 
+use Charisma\Parser\Node\Expression\AddExpression;
 use Charisma\Parser\Node\Expression\AwaitExpression;
+use Charisma\Parser\Node\Expression\BitwiseLeftShiftExpression;
 use Charisma\Parser\Node\Expression\BitwiseNotExpression;
+use Charisma\Parser\Node\Expression\BitwiseRightShiftExpression;
+use Charisma\Parser\Node\Expression\BitwiseUnsignedRightShiftExpression;
 use Charisma\Parser\Node\Expression\ComputedMemberAccessExpression;
 use Charisma\Parser\Node\Expression\DeleteExpression;
+use Charisma\Parser\Node\Expression\DivideExpression;
+use Charisma\Parser\Node\Expression\ExponentExpression;
 use Charisma\Parser\Node\Expression\FunctionCallExpression;
 use Charisma\Parser\Node\Expression\LValueExpression;
 use Charisma\Parser\Node\Expression\MemberAccessExpression;
+use Charisma\Parser\Node\Expression\ModuloExpression;
+use Charisma\Parser\Node\Expression\MultiplyExpression;
 use Charisma\Parser\Node\Expression\NewExpression;
 use Charisma\Parser\Node\Expression\NotExpression;
 use Charisma\Parser\Node\Expression\NumberExpression;
@@ -18,6 +26,7 @@ use Charisma\Parser\Node\Expression\PostfixIncrementExpression;
 use Charisma\Parser\Node\Expression\PrefixDecrementExpression;
 use Charisma\Parser\Node\Expression\PrefixIncrementExpression;
 use Charisma\Parser\Node\Expression\StringExpression;
+use Charisma\Parser\Node\Expression\SubtractExpression;
 use Charisma\Parser\Node\Expression\TypeofExpression;
 use Charisma\Parser\Node\Expression\UnaryNegationExpression;
 use Charisma\Parser\Node\Expression\UnaryPlusExpression;
@@ -132,6 +141,51 @@ trait ExpressionTrait
     protected function reduceAwaitExpression($expression)
     {
         return new AwaitExpression($expression);
+    }
+
+    protected function reduceExponentExpression($left, $right)
+    {
+        return new ExponentExpression($left, $right);
+    }
+
+    protected function reduceMultiplyExpression($left, $right)
+    {
+        return new MultiplyExpression($left, $right);
+    }
+
+    protected function reduceDivideExpression($left, $right)
+    {
+        return new DivideExpression($left, $right);
+    }
+
+    protected function reduceModuloExpression($left, $right)
+    {
+        return new ModuloExpression($left, $right);
+    }
+
+    protected function reduceAddExpression($left, $right)
+    {
+        return new AddExpression($left, $right);
+    }
+
+    protected function reduceSubtractExpression($left, $right)
+    {
+        return new SubtractExpression($left, $right);
+    }
+
+    protected function reduceBitwiseLeftShiftExpression($left, $right)
+    {
+        return new BitwiseLeftShiftExpression($left, $right);
+    }
+
+    protected function reduceBitwiseRightShiftExpression($left, $right)
+    {
+        return new BitwiseRightShiftExpression($left, $right);
+    }
+
+    protected function reduceBitwiseUnsignedRightShiftExpression($left, $right)
+    {
+        return new BitwiseUnsignedRightShiftExpression($left, $right);
     }
 
     protected function reduceDoubleQuotedStringExpression($str) {

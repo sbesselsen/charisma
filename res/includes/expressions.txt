@@ -18,6 +18,19 @@ operator VOID_ 16 right
 operator DELETE_ 16 right
 operator AWAIT_ 16 right
 
+operator EXPONENT 15 right
+
+operator MULTIPLY 14 left
+operator DIVIDE 14 left
+operator MODULO 14 left
+
+operator ADD 13 left
+operator SUBTRACT 13 left
+
+operator SHIFT_LEFT 12 left
+operator SHIFT_RIGHT 12 left
+operator SHIFT_RIGHT_UNSIGNED 12 left
+
 ;
 ; Paren expression.
 ;
@@ -68,6 +81,19 @@ Expression -> NOT Expression { reduceNotExpression($1) }
     | VOID_ Expression { reduceVoidExpression($1) }
     | DELETE_ Expression { reduceDeleteExpression($1) }
     | AWAIT_ Expression { reduceAwaitExpression($1) }
+
+;
+; All of the binary expression operators.
+;
+Expression -> Expression EXPONENT Expression { reduceExponentExpression($0, $2) }
+    | Expression MULTIPLY Expression { reduceMultiplyExpression($0, $2) }
+    | Expression DIVIDE Expression { reduceDivideExpression($0, $2) }
+    | Expression MODULO Expression { reduceModuloExpression($0, $2) }
+    | Expression ADD Expression { reduceAddExpression($0, $2) }
+    | Expression SUBTRACT Expression { reduceSubtractExpression($0, $2) }
+    | Expression SHIFT_LEFT Expression { reduceBitwiseLeftShiftExpression($0, $2) }
+    | Expression SHIFT_RIGHT Expression { reduceBitwiseRightShiftExpression($0, $2) }
+    | Expression SHIFT_RIGHT_UNSIGNED Expression { reduceBitwiseUnsignedRightShiftExpression($0, $2) }
 
 ;
 ; Number expressions.
