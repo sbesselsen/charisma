@@ -59,16 +59,16 @@
         },
         {
             "name": "sbesselsen/charm",
-            "version": "v1.0.4",
+            "version": "v1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sbesselsen/charm.git",
-                "reference": "6a710bc14b35f23f9e4ccf122d453ef8b1949fe6"
+                "reference": "6358e6d947406d439433afde154ec79689b12fa8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sbesselsen/charm/zipball/6a710bc14b35f23f9e4ccf122d453ef8b1949fe6",
-                "reference": "6a710bc14b35f23f9e4ccf122d453ef8b1949fe6",
+                "url": "https://api.github.com/repos/sbesselsen/charm/zipball/6358e6d947406d439433afde154ec79689b12fa8",
+                "reference": "6358e6d947406d439433afde154ec79689b12fa8",
                 "shasum": ""
             },
             "require": {
@@ -92,7 +92,7 @@
                 }
             ],
             "description": "A fast and simple PHP 7 parser framework",
-            "time": "2018-05-26T19:35:00+00:00"
+            "time": "2018-05-27T12:46:13+00:00"
         }
     ],
     "packages-dev": [],
