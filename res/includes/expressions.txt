@@ -1,4 +1,10 @@
 operator DOT 19 left
+operator BLOCK_OPEN 19 left
+operator PAREN_OPEN 19 left
+operator PRIO_PAREN_OPEN 19 left
+
+operator NEW_ 18 right
+
 operator INCREMENT 17 nonassoc
 operator DECREMENT 17 nonassoc
 
@@ -8,10 +14,10 @@ operator UNARY_PLUS 16 right
 operator UNARY_NEGATION 16 right
 operator PREFIX_INCREMENT 16 right
 operator PREFIX_DECREMENT 16 right
-operator TYPEOF 16 right
-operator VOID 16 right
-operator DELETE 16 right
-operator AWAIT 16 right
+operator TYPEOF_ 16 right
+operator VOID_ 16 right
+operator DELETE_ 16 right
+operator AWAIT_ 16 right
 
 ;
 ; LValue.
@@ -35,33 +41,26 @@ VariableAccessLValue -> IDENTIFIER { reduceVariableAccessExpression($0) }
 ;
 ; Expressions.
 ;
-Expression -> PathExpression
-Expression -> ParenExpression
-
-PathExpression -> LValue
+Expression -> LValue
     | FunctionCallExpression
     | ParenExpression
+    | NewExpression
+    | ValueExpression
 
 ParenExpression -> PAREN_OPEN Expression PAREN_CLOSE { $1 }
-
-Expression -> ValueExpression
-ValueExpression -> ObjectLikeValueExpression
 
 ;
 ; New expression.
 ;
-Expression -> NewExpression
-NewExpression -> NEW WHITESPACE ParenExpression PAREN_OPEN ArgumentList PAREN_CLOSE { reduceNewExpression($2, $4) }
-    | NEW WHITESPACE ParenExpression { reduceNewExpression($2) }
-    | NEW WHITESPACE LValue { reduceNewExpression($2) }
-    | NEW WHITESPACE FunctionCallExpression { reduceConstructedNewExpression($2) }
-    | NEW WHITESPACE NewExpression { reduceNewExpression($2) }
+NewExpression -> NEW_ Expression PRIO_PAREN_OPEN ArgumentList PAREN_CLOSE { reduceNewExpression($1, $3) }
+    | NEW_ Expression PRIO_PAREN_OPEN PAREN_CLOSE { reduceNewExpression($1) }
+    | NEW_ Expression { reduceNewExpression($1) }
 
 ;
 ; Function call expression.
 ;
-FunctionCallExpression -> LValue PAREN_OPEN ArgumentList PAREN_CLOSE { reduceFunctionCallExpression($0, $2) }
-    | LValue PAREN_OPEN PAREN_CLOSE { reduceFunctionCallExpression($0) }
+FunctionCallExpression -> Expression PAREN_OPEN ArgumentList PAREN_CLOSE { reduceFunctionCallExpression($0, $2) }
+    | Expression PAREN_OPEN PAREN_CLOSE { reduceFunctionCallExpression($0) }
 
 ;
 ; Postfix increment/decrement expression.
@@ -72,17 +71,16 @@ Expression -> LValue DECREMENT { reducePostfixDecrementExpression($0) }
 ;
 ; All of the unary expression operators.
 ;
-;TODO: Change DELETE WHITESPACE Expression -> DELETE WHITESPACE LValue as soon as we rewrite LValue.
 Expression -> NOT Expression { reduceNotExpression($1) }
     | TILDE Expression { reduceBitwiseNotExpression($1) }
     | UNARY_PLUS Expression { reduceUnaryPlusExpression($1) }
     | UNARY_NEGATION Expression { reduceUnaryNegationExpression($1) }
     | PREFIX_INCREMENT Expression { reducePrefixIncrementExpression($1) }
     | PREFIX_DECREMENT Expression { reducePrefixDecrementExpression($1) }
-    | TYPEOF WHITESPACE Expression { reduceTypeofExpression($2) }
-    | VOID WHITESPACE Expression { reduceVoidExpression($2) }
-    | DELETE WHITESPACE LValue { reduceDeleteExpression($2) }
-    | AWAIT WHITESPACE Expression { reduceAwaitExpression($2) }
+    | TYPEOF_ Expression { reduceTypeofExpression($1) }
+    | VOID_ Expression { reduceVoidExpression($1) }
+    | DELETE_ LValue { reduceDeleteExpression($1) }
+    | AWAIT_ Expression { reduceAwaitExpression($1) }
 
 ;
 ; Number expressions.

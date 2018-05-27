@@ -1,3 +1,5 @@
+; Paren open that has priority over a normal paren open; used for new expressions.
+token PRIO_PAREN_OPEN (
 token PAREN_OPEN (
 token PAREN_CLOSE )
 token BLOCK_OPEN [
@@ -51,18 +53,18 @@ token WHILE while
 token DO do
 token FOR for
 token FUNCTION function
-exact token NEW new
-exact token VAR var
-exact token CONST const
-exact token LET let
-exact token RETURN return
-exact token DELETE delete
-exact token TYPEOF typeof
-exact token VOID void
-exact token AWAIT await
-exact token INSTANCEOF instanceof
-exact token IN in
-exact token OF of
+escaped exact token NEW_ new\s
+escaped exact token VAR_ var\s
+escaped exact token CONST_ const\s
+escaped exact token LET_ let\s
+escaped exact token RETURN_ return\s
+escaped exact token DELETE_ delete\s
+escaped exact token TYPEOF_ typeof\s
+escaped exact token VOID_ void\s
+escaped exact token AWAIT_ await\s
+escaped exact token INSTANCEOF_ instanceof\s
+escaped exact token IN_ in\s
+escaped exact token OF_ of\s
 token NULL null
 token UNDEFINED undefined
 token NAN NaN

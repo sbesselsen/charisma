@@ -29,12 +29,6 @@ trait ExpressionTrait
         return new NewExpression($constructor, $argumentList ?? []);
     }
 
-    protected function reduceConstructedNewExpression($functionCall)
-    {
-        /** @var FunctionCallExpression $functionCall */
-        return new NewExpression($functionCall->expression, $functionCall->arguments);
-    }
-
     protected function reduceFunctionCallExpression($function, $argumentList = null)
     {
         return new FunctionCallExpression($function, $argumentList ?? []);
