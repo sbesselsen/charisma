@@ -2,10 +2,12 @@
 
 namespace Charisma\Parser\Reducer;
 
+use Charisma\Parser\Node\CodeBlockNode;
+
 trait CodeBlockTrait
 {
-    protected function reduceCodeBlockContent($p0)
+    protected function reduceCodeBlock($items)
     {
-        return $p0;
+        return new CodeBlockNode($items);
     }
 }

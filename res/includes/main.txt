@@ -12,6 +12,6 @@ CodeBlockItems -> CodeBlockItems NONCODE
     | Statement SEMICOLON { arrayOf($0) }
     | NONCODE { emptyArray }
 
-CodeBlockContent -> CodeBlockItems { reduceCodeBlockContent }
+CodeBlockContent -> CodeBlockItems
 
-CodeBlock -> CURLY_OPEN CodeBlockContent CURLY_CLOSE { $1 }
+CodeBlock -> CURLY_OPEN CodeBlockContent CURLY_CLOSE { reduceCodeBlock($1) }

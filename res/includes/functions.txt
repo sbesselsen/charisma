@@ -3,3 +3,11 @@
 ;
 ArgumentList -> ArgumentList COMMA Expression { arrayPush($0, $2) }
     | Expression { arrayOf($0) }
+
+ParameterList -> ParameterList COMMA Parameter { arrayPush($0, $2) }
+    | Parameter { arrayOf($0) }
+
+Parameter -> IDENTIFIER { reduceParameterNode($0) }
+
+WrappedParameterList -> PAREN_OPEN ParameterList PAREN_CLOSE { $1 }
+    | PAREN_OPEN PAREN_CLOSE { emptyArray($0) }

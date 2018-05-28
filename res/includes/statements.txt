@@ -2,3 +2,5 @@
 ; Statements.
 ;
 Statement -> Expression { reduceExpressionStatement }
+
+Statement -> PRIO_FUNCTION_ IDENTIFIER WrappedParameterList CodeBlock { reduceFunctionDeclarationStatement($1, $2, $3) }

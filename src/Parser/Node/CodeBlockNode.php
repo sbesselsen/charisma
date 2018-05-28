@@ -12,5 +12,14 @@ final class CodeBlockNode extends Node
      * @var Statement[]
      *   The statements.
      */
-    public $statements = [];
+    public $statements;
+
+    /**
+     * CodeBlockNode constructor.
+     * @param Statement[] $statements
+     */
+    public function __construct(array $statements)
+    {
+        $this->statements = $statements;
+    }
 }

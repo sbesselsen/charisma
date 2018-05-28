@@ -28,6 +28,7 @@ use Charisma\Parser\Node\Expression\EqualityExpression;
 use Charisma\Parser\Node\Expression\ExponentAssignmentExpression;
 use Charisma\Parser\Node\Expression\ExponentExpression;
 use Charisma\Parser\Node\Expression\FunctionCallExpression;
+use Charisma\Parser\Node\Expression\FunctionDefinitionExpression;
 use Charisma\Parser\Node\Expression\GreaterThanExpression;
 use Charisma\Parser\Node\Expression\GreaterThanOrEqualExpression;
 use Charisma\Parser\Node\Expression\InequalityExpression;
@@ -63,6 +64,8 @@ use Charisma\Parser\Node\Expression\VariableAccessExpression;
 use Charisma\Parser\Node\Expression\VoidExpression;
 use Charisma\Parser\Node\Expression\YieldExpression;
 use Charisma\Parser\Node\Expression\YieldStarExpression;
+use Charisma\Parser\Node\FunctionDefinitionNode;
+use Charisma\Parser\Node\FunctionParameterNode;
 
 trait ExpressionTrait
 {
@@ -372,6 +375,21 @@ trait ExpressionTrait
     protected function reduceConditionalExpression($condition, $if, $else)
     {
         return new ConditionalExpression($condition, $if, $else);
+    }
+
+    protected function reduceNamedFunctionExpression($name, $parameters, $body)
+    {
+        return new FunctionDefinitionExpression(new FunctionDefinitionNode($name[0], $parameters, $body));
+    }
+
+    protected function reduceAnonymousFunctionExpression($parameters, $body)
+    {
+        return new FunctionDefinitionExpression(new FunctionDefinitionNode(null, $parameters, $body));
+    }
+
+    protected function reduceParameterNode($name)
+    {
+        return new FunctionParameterNode($name[0]);
     }
 
     protected function reduceDoubleQuotedStringExpression($str) {

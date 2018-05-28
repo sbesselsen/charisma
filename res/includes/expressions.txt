@@ -178,6 +178,13 @@ Expression -> NUMBER_INTEGER { reduceIntegerNumberExpression }
     | NUMBER_OCTAL { reduceOctalNumberExpression }
 
 ;
+; Function expressions.
+;
+Expression -> FUNCTION_ IDENTIFIER WrappedParameterList CodeBlock { reduceNamedFunctionExpression($1, $2, $3) }
+    | FUNCTION_ WrappedParameterList CodeBlock { reduceAnonymousFunctionExpression($1, $2) }
+    | FUNCTION WrappedParameterList CodeBlock { reduceAnonymousFunctionExpression($1, $2) }
+
+;
 ; String expressions.
 Expression -> STRING_DOUBLEQUOTE { reduceDoubleQuotedStringExpression($0) }
     | STRING_SINGLEQUOTE { reduceSingleQuotedStringExpression($0) }
