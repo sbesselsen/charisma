@@ -76,6 +76,8 @@ escaped exact token IN_ in\s
 escaped exact token OF_ of\s
 escaped exact token YIELD_STAR_ yield*\s
 escaped exact token YIELD_ yield\s
+escaped exact token CASE_ case\s
+token DEFAULT default
 token NULL null
 token UNDEFINED undefined
 token NAN NaN

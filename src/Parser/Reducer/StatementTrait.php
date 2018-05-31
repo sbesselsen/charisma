@@ -7,6 +7,7 @@ use Charisma\Parser\Node\Expression\Expression;
 use Charisma\Parser\Node\FunctionDefinitionNode;
 use Charisma\Parser\Node\Statement\DoWhileStatement;
 use Charisma\Parser\Node\Statement\ExpressionStatement;
+use Charisma\Parser\Node\Statement\ForStatement;
 use Charisma\Parser\Node\Statement\FunctionDeclarationStatement;
 use Charisma\Parser\Node\Statement\IfStatement;
 use Charisma\Parser\Node\Statement\WhileStatement;
@@ -41,5 +42,15 @@ trait StatementTrait
 
     protected function reduceDoWhileStatement($condition, $codeBlock): DoWhileStatement {
         return new DoWhileStatement($condition, $codeBlock);
+    }
+
+    protected function reduceForStatement($pre, $condition, $post, $codeBlock): ForStatement {
+        if (is_array($pre)) {
+            $pre = null;
+        }
+        if (is_array($post)) {
+            $post = null;
+        }
+        return new ForStatement($condition, $codeBlock, $pre, $post);
     }
 }

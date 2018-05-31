@@ -21,3 +21,13 @@ Statement -> IF PAREN_OPEN Expression PAREN_CLOSE CodeBlock { reduceIfStatement(
 ;
 Statement -> WHILE PAREN_OPEN Expression PAREN_CLOSE CodeBlock { reduceWhileStatement($2, $4) }
 Statement -> DO CodeBlock WHILE PAREN_OPEN Expression PAREN_CLOSE { reduceDoWhileStatement($4, $2) }
+
+;
+; For statements.
+Statement -> FOR PAREN_OPEN ForPreStatement SEMICOLON Expression SEMICOLON Expression PAREN_CLOSE CodeBlock { reduceForStatement($2, $4, $6, $8) }
+    | FOR PAREN_OPEN SEMICOLON Expression SEMICOLON Expression PAREN_CLOSE CodeBlock { reduceForStatement($2, $3, $5, $7) }
+    | FOR PAREN_OPEN ForPreStatement SEMICOLON Expression SEMICOLON PAREN_CLOSE CodeBlock { reduceForStatement($2, $4, $5, $7) }
+    | FOR PAREN_OPEN SEMICOLON Expression SEMICOLON PAREN_CLOSE CodeBlock { reduceForStatement($2, $3, $4, $6) }
+
+ForPreStatement -> Expression { reduceExpressionStatement($0) }
+;    | VarDeclareStatement  TODO
