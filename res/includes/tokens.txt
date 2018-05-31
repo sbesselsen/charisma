@@ -59,6 +59,7 @@ token ELSE else
 token WHILE while
 token DO do
 token FOR for
+token SWITCH switch
 escaped token PRIO_FUNCTION_ function\s
 escaped token FUNCTION_ function\s
 token FUNCTION function

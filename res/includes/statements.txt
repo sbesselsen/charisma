@@ -24,6 +24,7 @@ Statement -> DO CodeBlock WHILE PAREN_OPEN Expression PAREN_CLOSE { reduceDoWhil
 
 ;
 ; For statements.
+;
 Statement -> FOR PAREN_OPEN ForPreStatement SEMICOLON Expression SEMICOLON Expression PAREN_CLOSE CodeBlock { reduceForStatement($2, $4, $6, $8) }
     | FOR PAREN_OPEN SEMICOLON Expression SEMICOLON Expression PAREN_CLOSE CodeBlock { reduceForStatement($2, $3, $5, $7) }
     | FOR PAREN_OPEN ForPreStatement SEMICOLON Expression SEMICOLON PAREN_CLOSE CodeBlock { reduceForStatement($2, $4, $5, $7) }
@@ -31,3 +32,20 @@ Statement -> FOR PAREN_OPEN ForPreStatement SEMICOLON Expression SEMICOLON Expre
 
 ForPreStatement -> Expression { reduceExpressionStatement($0) }
 ;    | VarDeclareStatement  TODO
+
+;
+; Switch/case statements.
+;
+Statement -> SWITCH PAREN_OPEN Expression PAREN_CLOSE CURLY_OPEN SwitchCaseItems CURLY_CLOSE { reduceSwitch($2, $5) }
+Statement -> SWITCH PAREN_OPEN Expression PAREN_CLOSE CURLY_OPEN NONCODE SwitchCaseItems CURLY_CLOSE { reduceSwitch($2, $6) }
+Statement -> SWITCH PAREN_OPEN Expression PAREN_CLOSE CURLY_OPEN CURLY_CLOSE { reduceSwitch($2) }
+
+SwitchCaseItems -> SwitchCaseItems SwitchCaseItem { arrayPush($0, $1) }
+    | SwitchCaseItem { arrayOf($0) }
+
+SwitchCaseItem -> CASE_ Expression COLON CodeBlockItems { reduceSwitchCase($1, $3) }
+    | CASE_ Expression COLON { reduceSwitchCase($1) }
+    | DEFAULT COLON { reduceSwitchDefault($0) }
+    | DEFAULT COLON CodeBlockItems { reduceSwitchDefault($0, $2) }
+
+

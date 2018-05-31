@@ -10,7 +10,9 @@ use Charisma\Parser\Node\Statement\ExpressionStatement;
 use Charisma\Parser\Node\Statement\ForStatement;
 use Charisma\Parser\Node\Statement\FunctionDeclarationStatement;
 use Charisma\Parser\Node\Statement\IfStatement;
+use Charisma\Parser\Node\Statement\SwitchStatement;
 use Charisma\Parser\Node\Statement\WhileStatement;
+use Charisma\Parser\Node\SwitchCaseNode;
 
 trait StatementTrait
 {
@@ -52,5 +54,17 @@ trait StatementTrait
             $post = null;
         }
         return new ForStatement($condition, $codeBlock, $pre, $post);
+    }
+
+    protected function reduceSwitch($expression, $cases = []): SwitchStatement {
+        return new SwitchStatement($expression, $cases);
+    }
+
+    protected function reduceSwitchCase($expression, $statements = []): SwitchCaseNode {
+        return new SwitchCaseNode($expression, $statements);
+    }
+
+    protected function reduceSwitchDefault($_, $statements = []): SwitchCaseNode {
+        return new SwitchCaseNode(null, $statements);
     }
 }
