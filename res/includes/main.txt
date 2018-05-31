@@ -7,11 +7,11 @@ Start -> CodeBlockContent
 ; Code blocks.
 ;
 CodeBlockItems -> CodeBlockItems NONCODE
-    | CodeBlockItems SEMICOLON
-    | CodeBlockItems Statement SEMICOLON { arrayPush($0, $1) }
-    | Statement SEMICOLON { arrayOf($0) }
+    | CodeBlockItems Statement { arrayPush($0, $1) }
+    | Statement { arrayOf($0) }
     | NONCODE { emptyArray }
 
 CodeBlockContent -> CodeBlockItems
 
 CodeBlock -> CURLY_OPEN CodeBlockContent CURLY_CLOSE { reduceCodeBlock($1) }
+    | Statement { reduceSingleStatementCodeBlock($0) }

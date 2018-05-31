@@ -1,6 +1,23 @@
-;
-; Statements.
-;
-Statement -> Expression { reduceExpressionStatement }
+operator ELSE 20 left
 
+;
+; Expression statements.
+;
+Statement -> Expression SEMICOLON { reduceExpressionStatement($0) }
+
+;
+; Function statements.
+;
 Statement -> PRIO_FUNCTION_ IDENTIFIER WrappedParameterList CodeBlock { reduceFunctionDeclarationStatement($1, $2, $3) }
+
+;
+; If statements.
+;
+Statement -> IF PAREN_OPEN Expression PAREN_CLOSE CodeBlock { reduceIfStatement($2, $4) }
+    | IF PAREN_OPEN Expression PAREN_CLOSE CodeBlock ELSE CodeBlock { reduceIfStatement($2, $4, $6) }
+
+;
+; While statements.
+;
+Statement -> WHILE PAREN_OPEN Expression PAREN_CLOSE CodeBlock { reduceWhileStatement($2, $4) }
+Statement -> DO CodeBlock WHILE PAREN_OPEN Expression PAREN_CLOSE { reduceDoWhileStatement($4, $2) }
