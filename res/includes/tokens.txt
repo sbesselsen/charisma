@@ -82,6 +82,8 @@ token DEFAULT default
 token NULL null
 token UNDEFINED undefined
 token NAN NaN
+token TRUE true
+token FALSE false
 
 regex IDENTIFIER [a-zA-Z_$][a-zA-Z_0-9$]*
 

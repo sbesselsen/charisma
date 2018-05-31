@@ -21,6 +21,7 @@ use Charisma\Parser\Node\Expression\BitwiseXorAssignmentExpression;
 use Charisma\Parser\Node\Expression\BitwiseXorExpression;
 use Charisma\Parser\Node\Expression\ComputedMemberAccessExpression;
 use Charisma\Parser\Node\Expression\ConditionalExpression;
+use Charisma\Parser\Node\Expression\ConstantExpression;
 use Charisma\Parser\Node\Expression\DeleteExpression;
 use Charisma\Parser\Node\Expression\DivideAssignmentExpression;
 use Charisma\Parser\Node\Expression\DivideExpression;
@@ -415,5 +416,22 @@ trait ExpressionTrait
     protected function reduceOctalNumberExpression($number)
     {
         return new NumberExpression((int)octdec($number[0]));
+    }
+
+    protected function reduceConstantExpression($token) {
+        switch ($token[0]) {
+            case 'null':
+                return ConstantExpression::nullConstant();
+            case 'NaN':
+                return ConstantExpression::nanConstant();
+            case 'true':
+                return ConstantExpression::trueConstant();
+            case 'false':
+                return ConstantExpression::trueConstant();
+            case 'undefined':
+                return ConstantExpression::undefinedConstant();
+            default:
+                throw new \Exception('Unknown constant: ' . $token[0]);
+        }
     }
 }

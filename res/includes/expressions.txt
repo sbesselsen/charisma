@@ -186,5 +186,15 @@ Expression -> FUNCTION_ IDENTIFIER WrappedParameterList CodeBlock { reduceNamedF
 
 ;
 ; String expressions.
+;
 Expression -> STRING_DOUBLEQUOTE { reduceDoubleQuotedStringExpression($0) }
     | STRING_SINGLEQUOTE { reduceSingleQuotedStringExpression($0) }
+
+;
+; Value constants.
+;
+Expression -> NULL { reduceConstantExpression($0) }
+    | UNDEFINED { reduceConstantExpression($0) }
+    | NAN { reduceConstantExpression($0) }
+    | TRUE { reduceConstantExpression($0) }
+    | FALSE { reduceConstantExpression($0) }
