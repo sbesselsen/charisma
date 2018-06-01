@@ -191,6 +191,15 @@ Expression -> STRING_DOUBLEQUOTE { reduceDoubleQuotedStringExpression($0) }
     | STRING_SINGLEQUOTE { reduceSingleQuotedStringExpression($0) }
 
 ;
+; Array expressions.
+;
+Expression -> BLOCK_OPEN ArrayItems BLOCK_CLOSE { reduceArray($1) }
+Expression -> BLOCK_OPEN BLOCK_CLOSE { reduceArray($0) }
+Expression -> BLOCK_OPEN ArrayItems COMMA BLOCK_CLOSE { reduceArray($1) }
+ArrayItems -> ArrayItems COMMA Expression { arrayPush($0, $2) }
+    | Expression { arrayOf($0) }
+
+;
 ; Value constants.
 ;
 Expression -> NULL { reduceConstantExpression($0) }

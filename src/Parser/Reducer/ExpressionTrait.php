@@ -4,6 +4,7 @@ namespace Charisma\Parser\Reducer;
 
 use Charisma\Parser\Node\Expression\AddAssignmentExpression;
 use Charisma\Parser\Node\Expression\AddExpression;
+use Charisma\Parser\Node\Expression\ArrayExpression;
 use Charisma\Parser\Node\Expression\AssignmentExpression;
 use Charisma\Parser\Node\Expression\AwaitExpression;
 use Charisma\Parser\Node\Expression\BitwiseAndAssignmentExpression;
@@ -416,6 +417,13 @@ trait ExpressionTrait
     protected function reduceOctalNumberExpression($number)
     {
         return new NumberExpression((int)octdec($number[0]));
+    }
+
+    protected function reduceArray($elements) {
+        if ($elements[0] === '[') {
+            $elements = [];
+        }
+        return new ArrayExpression($elements);
     }
 
     protected function reduceConstantExpression($token) {
