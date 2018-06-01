@@ -86,6 +86,7 @@ token UNDEFINED undefined
 token NAN NaN
 token TRUE true
 token FALSE false
+token RETURN return
 
 regex IDENTIFIER [a-zA-Z_$][a-zA-Z_0-9$]*
 

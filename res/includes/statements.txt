@@ -36,9 +36,9 @@ ForPreStatement -> Expression { reduceExpressionStatement($0) }
 ;
 ; Switch/case statements.
 ;
-Statement -> SWITCH PAREN_OPEN Expression PAREN_CLOSE CURLY_OPEN SwitchCaseItems CURLY_CLOSE { reduceSwitch($2, $5) }
-Statement -> SWITCH PAREN_OPEN Expression PAREN_CLOSE CURLY_OPEN NONCODE SwitchCaseItems CURLY_CLOSE { reduceSwitch($2, $6) }
-Statement -> SWITCH PAREN_OPEN Expression PAREN_CLOSE CURLY_OPEN CURLY_CLOSE { reduceSwitch($2) }
+Statement -> SWITCH PAREN_OPEN Expression PAREN_CLOSE CURLY_OPEN SwitchCaseItems CURLY_CLOSE { reduceSwitchStatement($2, $5) }
+Statement -> SWITCH PAREN_OPEN Expression PAREN_CLOSE CURLY_OPEN NONCODE SwitchCaseItems CURLY_CLOSE { reduceSwitchStatement($2, $6) }
+Statement -> SWITCH PAREN_OPEN Expression PAREN_CLOSE CURLY_OPEN CURLY_CLOSE { reduceSwitchStatement($2) }
 
 SwitchCaseItems -> SwitchCaseItems SwitchCaseItem { arrayPush($0, $1) }
     | SwitchCaseItem { arrayOf($0) }
@@ -48,4 +48,9 @@ SwitchCaseItem -> CASE_ Expression COLON CodeBlockItems { reduceSwitchCase($1, $
     | DEFAULT COLON { reduceSwitchDefault($0) }
     | DEFAULT COLON CodeBlockItems { reduceSwitchDefault($0, $2) }
 
-
+;
+; Return statements.
+;
+Statement -> RETURN_ Expression SEMICOLON { reduceReturnStatement($0, $1) }
+    | RETURN_ SEMICOLON { reduceReturnStatement($0) }
+    | RETURN SEMICOLON { reduceReturnStatement($0) }
