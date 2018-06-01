@@ -5,6 +5,8 @@ namespace Charisma\Parser\Reducer;
 use Charisma\Parser\Node\CodeBlockNode;
 use Charisma\Parser\Node\Expression\Expression;
 use Charisma\Parser\Node\FunctionDefinitionNode;
+use Charisma\Parser\Node\Statement\BreakStatement;
+use Charisma\Parser\Node\Statement\ContinueStatement;
 use Charisma\Parser\Node\Statement\DoWhileStatement;
 use Charisma\Parser\Node\Statement\ExpressionStatement;
 use Charisma\Parser\Node\Statement\ForStatement;
@@ -71,5 +73,13 @@ trait StatementTrait
 
     protected function reduceReturnStatement($_, $value = null): ReturnStatement {
         return new ReturnStatement($value);
+    }
+
+    protected function reduceBreakStatement($_, $label = null): BreakStatement {
+        return new BreakStatement($label ? $label[0] : null);
+    }
+
+    protected function reduceContinueStatement($_, $label = null): ContinueStatement {
+        return new ContinueStatement($label ? $label[0] : null);
     }
 }

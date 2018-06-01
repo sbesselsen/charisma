@@ -54,3 +54,17 @@ SwitchCaseItem -> CASE_ Expression COLON CodeBlockItems { reduceSwitchCase($1, $
 Statement -> RETURN_ Expression SEMICOLON { reduceReturnStatement($0, $1) }
     | RETURN_ SEMICOLON { reduceReturnStatement($0) }
     | RETURN SEMICOLON { reduceReturnStatement($0) }
+
+;
+; Break statements.
+;
+Statement -> BREAK_ IDENTIFIER SEMICOLON { reduceBreakStatement($0, $1) }
+    | BREAK_ SEMICOLON { reduceBreakStatement($0) }
+    | BREAK SEMICOLON { reduceBreakStatement($0) }
+
+;
+; Continue statements.
+;
+Statement -> CONTINUE_ IDENTIFIER SEMICOLON { reduceContinueStatement($0, $1) }
+    | CONTINUE_ SEMICOLON { reduceContinueStatement($0) }
+    | CONTINUE SEMICOLON { reduceContinueStatement($0) }
