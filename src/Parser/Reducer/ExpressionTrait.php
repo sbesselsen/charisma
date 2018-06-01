@@ -49,6 +49,7 @@ use Charisma\Parser\Node\Expression\MultiplyExpression;
 use Charisma\Parser\Node\Expression\NewExpression;
 use Charisma\Parser\Node\Expression\NotExpression;
 use Charisma\Parser\Node\Expression\NumberExpression;
+use Charisma\Parser\Node\Expression\ObjectExpression;
 use Charisma\Parser\Node\Expression\ParenExpression;
 use Charisma\Parser\Node\Expression\PostfixDecrementExpression;
 use Charisma\Parser\Node\Expression\PostfixIncrementExpression;
@@ -68,6 +69,7 @@ use Charisma\Parser\Node\Expression\YieldExpression;
 use Charisma\Parser\Node\Expression\YieldStarExpression;
 use Charisma\Parser\Node\FunctionDefinitionNode;
 use Charisma\Parser\Node\FunctionParameterNode;
+use Charisma\Parser\Node\ObjectItemNode;
 
 trait ExpressionTrait
 {
@@ -419,11 +421,25 @@ trait ExpressionTrait
         return new NumberExpression((int)octdec($number[0]));
     }
 
-    protected function reduceArray($elements) {
-        if ($elements[0] === '[') {
-            $elements = [];
+    protected function reduceArray($items) {
+        if ($items[0] === '[') {
+            $items = [];
         }
-        return new ArrayExpression($elements);
+        return new ArrayExpression($items);
+    }
+
+    protected function reduceObject($items) {
+        if ($items[0] === '{') {
+            $items = [];
+        }
+        return new ObjectExpression($items);
+    }
+
+    protected function reduceObjectItem($key, $value) {
+        if (is_array($key)) {
+            $key = new StringExpression($key[0]);
+        }
+        return new ObjectItemNode($key, $value);
     }
 
     protected function reduceConstantExpression($token) {

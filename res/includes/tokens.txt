@@ -5,6 +5,8 @@ token BLOCK_CLOSE ]
 token CURLY_OPEN {
 token CURLY_CLOSE }
 token QUESTIONMARK ?
+token TERNARY_COLON :
+token OBJECT_COLON :
 token COLON :
 token COMMA ,
 token SEMICOLON ;

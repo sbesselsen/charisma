@@ -173,7 +173,8 @@ Expression -> Expression QUESTIONMARK Expression COLON Expression { reduceCondit
 ;
 ; Number expressions.
 ;
-Expression -> NUMBER_INTEGER { reduceIntegerNumberExpression }
+Expression -> NumberExpression
+NumberExpression -> NUMBER_INTEGER { reduceIntegerNumberExpression }
     | NUMBER_FLOAT { reduceFloatNumberExpression }
     | NUMBER_OCTAL { reduceOctalNumberExpression }
 
@@ -187,17 +188,30 @@ Expression -> FUNCTION_ IDENTIFIER WrappedParameterList CodeBlock { reduceNamedF
 ;
 ; String expressions.
 ;
-Expression -> STRING_DOUBLEQUOTE { reduceDoubleQuotedStringExpression($0) }
+Expression -> StringExpression
+StringExpression -> STRING_DOUBLEQUOTE { reduceDoubleQuotedStringExpression($0) }
     | STRING_SINGLEQUOTE { reduceSingleQuotedStringExpression($0) }
 
 ;
 ; Array expressions.
 ;
 Expression -> BLOCK_OPEN ArrayItems BLOCK_CLOSE { reduceArray($1) }
-Expression -> BLOCK_OPEN BLOCK_CLOSE { reduceArray($0) }
-Expression -> BLOCK_OPEN ArrayItems COMMA BLOCK_CLOSE { reduceArray($1) }
+    | BLOCK_OPEN BLOCK_CLOSE { reduceArray($0) }
+    | BLOCK_OPEN ArrayItems COMMA BLOCK_CLOSE { reduceArray($1) }
 ArrayItems -> ArrayItems COMMA Expression { arrayPush($0, $2) }
     | Expression { arrayOf($0) }
+
+;
+; Object expressions.
+;
+Expression -> CURLY_OPEN ObjectItems CURLY_CLOSE { reduceObject($1) }
+    | CURLY_OPEN CURLY_CLOSE { reduceObject($0) }
+    | CURLY_OPEN ObjectItems COMMA CURLY_CLOSE { reduceObject($1) }
+ObjectItems -> ObjectItems COMMA ObjectItem { arrayPush($0, $2) }
+    | ObjectItem { arrayOf($0) }
+ObjectItem -> IDENTIFIER OBJECT_COLON Expression { reduceObjectItem($0, $2) }
+    | StringExpression OBJECT_COLON Expression { reduceObjectItem($0, $2) }
+    | NumberExpression OBJECT_COLON Expression { reduceObjectItem($0, $2) }
 
 ;
 ; Value constants.

@@ -2,19 +2,21 @@
 
 namespace Charisma\Parser\Node\Expression;
 
-final class ArrayExpression extends Expression
+use Charisma\Parser\Node\ObjectItemNode;
+
+final class ObjectExpression extends Expression
 {
     /**
-     * The items of the array.
+     * The items in the object.
      *
-     * @var Expression[]
+     * @var ObjectItemNode[]
      *   The items.
      */
     public $items;
 
     /**
      * ArrayExpression constructor.
-     * @param Expression[] $items
+     * @param ObjectItemNode[] $items
      */
     public function __construct(array $items)
     {
