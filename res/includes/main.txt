@@ -13,5 +13,7 @@ CodeBlockItems -> CodeBlockItems NONCODE
 
 CodeBlockContent -> CodeBlockItems
 
-CodeBlock -> CURLY_OPEN CodeBlockContent CURLY_CLOSE { reduceCodeBlock($1) }
+CodeBlock -> EncapsedCodeBlock
     | Statement { reduceSingleStatementCodeBlock($0) }
+
+EncapsedCodeBlock -> CURLY_OPEN CodeBlockContent CURLY_CLOSE { reduceCodeBlock($1) }

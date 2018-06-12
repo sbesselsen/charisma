@@ -15,6 +15,7 @@ use Charisma\Parser\Node\Statement\IfStatement;
 use Charisma\Parser\Node\Statement\LabeledStatement;
 use Charisma\Parser\Node\Statement\ReturnStatement;
 use Charisma\Parser\Node\Statement\SwitchStatement;
+use Charisma\Parser\Node\Statement\TryCatchStatement;
 use Charisma\Parser\Node\Statement\WhileStatement;
 use Charisma\Parser\Node\SwitchCaseNode;
 
@@ -86,5 +87,9 @@ trait StatementTrait
 
     protected function reduceLabeledStatement($label, $statement): LabeledStatement {
         return new LabeledStatement(preg_replace('(\s*:$)', '', $label[0]), $statement);
+    }
+
+    protected function reduceTryCatch($try, $variable, $catch): TryCatchStatement {
+        return new TryCatchStatement($try, $variable[0], $catch);
     }
 }
