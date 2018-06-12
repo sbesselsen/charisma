@@ -193,6 +193,11 @@ StringExpression -> STRING_DOUBLEQUOTE { reduceDoubleQuotedStringExpression($0) 
     | STRING_SINGLEQUOTE { reduceSingleQuotedStringExpression($0) }
 
 ;
+; Regex expressions.
+;
+Expression -> REGEX { reduceRegexExpression($0) }
+
+;
 ; Array expressions.
 ;
 Expression -> BLOCK_OPEN ArrayItems BLOCK_CLOSE { reduceArray($1) }

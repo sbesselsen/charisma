@@ -18,11 +18,21 @@ final class StringExpression extends ValueExpression
      */
     public function __construct(string $value)
     {
-        if ($value{0} === "'") {
-            $this->value = self::unescapeSingleQuoted(substr($value, 1, -1));
+        $this->value = $value;
+    }
+
+    /**
+     * @param string $expression
+     *
+     * @return StringExpression
+     */
+    public static function fromExpression(string $expression): StringExpression {
+        if ($expression{0} === "'") {
+            $value = self::unescapeSingleQuoted(substr($expression, 1, -1));
         } else {
-            $this->value = self::unescapeDoubleQuoted(substr($value, 1, -1));
+            $value = self::unescapeDoubleQuoted(substr($expression, 1, -1));
         }
+        return new static($value);
     }
 
     /**

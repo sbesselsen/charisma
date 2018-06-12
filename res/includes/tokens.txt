@@ -105,7 +105,7 @@ regex NUMBER_OCTAL 0x[0-9abcdefABCDEF]+
 regex NUMBER_INTEGER [0-9]+
 regex NUMBER_FLOAT [0-9]+\.[0-9]+
 
-regex REGEX \/[^ \/]([^\\\/]+|\\\\|\\\/|\\[^\/])*\/[a-zA-Z]*
+regex REGEX \/(?=[^ \/])([^\\\/]+|\\\\|\\\/|\\[^\/])*\/[a-zA-Z]*
 regex COMMENT_MULTILINE /\/*.*?\*/
 regex COMMENT_SINGLELINE //[^\n]*
 

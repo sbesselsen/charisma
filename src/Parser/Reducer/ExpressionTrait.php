@@ -55,6 +55,7 @@ use Charisma\Parser\Node\Expression\PostfixDecrementExpression;
 use Charisma\Parser\Node\Expression\PostfixIncrementExpression;
 use Charisma\Parser\Node\Expression\PrefixDecrementExpression;
 use Charisma\Parser\Node\Expression\PrefixIncrementExpression;
+use Charisma\Parser\Node\Expression\RegexExpression;
 use Charisma\Parser\Node\Expression\StrictEqualityExpression;
 use Charisma\Parser\Node\Expression\StrictInequalityExpression;
 use Charisma\Parser\Node\Expression\StringExpression;
@@ -397,13 +398,15 @@ trait ExpressionTrait
     }
 
     protected function reduceDoubleQuotedStringExpression($str) {
-        // TODO: unescape
-        return new StringExpression($str[0]);
+        return StringExpression::fromExpression($str[0]);
     }
 
     protected function reduceSingleQuotedStringExpression($str) {
-        // TODO: unescape
-        return new StringExpression($str[0]);
+        return StringExpression::fromExpression($str[0]);
+    }
+
+    protected function reduceRegexExpression($str) {
+        return RegexExpression::fromExpression($str[0]);
     }
 
     protected function reduceIntegerNumberExpression($number)
