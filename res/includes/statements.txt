@@ -78,3 +78,8 @@ Statement -> LABEL Statement { reduceLabeledStatement($0, $1) }
 ; Try/catch statements.
 ;
 Statement -> TRY EncapsedCodeBlock CATCH PAREN_OPEN IDENTIFIER PAREN_CLOSE EncapsedCodeBlock { reduceTryCatch($1, $4, $6) }
+
+;
+; Throw statements.
+;
+Statement -> THROW Expression SEMICOLON { reduceThrowStatement($1) }

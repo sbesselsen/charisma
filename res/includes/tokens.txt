@@ -64,6 +64,7 @@ token FOR for
 token SWITCH switch
 token TRY try
 token CATCH catch
+token THROW throw
 escaped token PRIO_FUNCTION_ function\s
 escaped token FUNCTION_ function\s
 token FUNCTION function
