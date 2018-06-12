@@ -92,6 +92,7 @@ token BREAK break
 escaped exact token CONTINUE_ continue\s
 token CONTINUE continue
 
+regex LABEL [a-zA-Z_$][a-zA-Z_0-9$]*\s*:
 regex IDENTIFIER [a-zA-Z_$][a-zA-Z_0-9$]*
 
 regex STRING_DOUBLEQUOTE "([^\\"]+|\\\\|\\"|\\[^"])*"

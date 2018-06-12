@@ -12,6 +12,7 @@ use Charisma\Parser\Node\Statement\ExpressionStatement;
 use Charisma\Parser\Node\Statement\ForStatement;
 use Charisma\Parser\Node\Statement\FunctionDeclarationStatement;
 use Charisma\Parser\Node\Statement\IfStatement;
+use Charisma\Parser\Node\Statement\LabeledStatement;
 use Charisma\Parser\Node\Statement\ReturnStatement;
 use Charisma\Parser\Node\Statement\SwitchStatement;
 use Charisma\Parser\Node\Statement\WhileStatement;
@@ -81,5 +82,9 @@ trait StatementTrait
 
     protected function reduceContinueStatement($_, $label = null): ContinueStatement {
         return new ContinueStatement($label ? $label[0] : null);
+    }
+
+    protected function reduceLabeledStatement($label, $statement): LabeledStatement {
+        return new LabeledStatement(preg_replace('(\s*:$)', '', $label[0]), $statement);
     }
 }

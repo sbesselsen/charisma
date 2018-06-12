@@ -68,3 +68,8 @@ Statement -> BREAK_ IDENTIFIER SEMICOLON { reduceBreakStatement($0, $1) }
 Statement -> CONTINUE_ IDENTIFIER SEMICOLON { reduceContinueStatement($0, $1) }
     | CONTINUE_ SEMICOLON { reduceContinueStatement($0) }
     | CONTINUE SEMICOLON { reduceContinueStatement($0) }
+
+;
+; Labeled statements.
+;
+Statement -> LABEL Statement { reduceLabeledStatement($0, $1) }
